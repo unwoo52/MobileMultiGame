@@ -257,7 +257,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5276493771962416653, guid: 7118caf7021c1d2438332d9b9f0da407,
+          type: 3}
         m_TargetAssemblyTypeName: Com.MyCompany.MyGame.GameManager, Assembly-CSharp
         m_MethodName: LeaveRoom
         m_Mode: 1
