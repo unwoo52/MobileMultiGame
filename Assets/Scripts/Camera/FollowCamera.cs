@@ -14,7 +14,12 @@ public class FollowCamera : MonoBehaviour
     private void Update()
     {
         FollowPos = Vector3.Lerp(FollowPos, FollowTarget.transform.position, Time.deltaTime * LerpSpeed);
-        transform.position = FollowPos + Vector3.up* HeightVector + Vector3.right*SideVector + Vector3.forward*ForwardVector + -Camera.main.transform.forward*Dist;
+        transform.position = 
+            FollowPos
+            + Vector3.up* HeightVector
+            + Vector3.right*SideVector
+            + Vector3.forward*ForwardVector
+            + -Camera.main.transform.forward*Dist;
     }
 }
 
