@@ -1,12 +1,14 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public interface IGetInstallObjectsParent
 {
     Transform GetInstallObjectsParent();
 }
-public class GameManager : MonoBehaviour, IGetInstallObjectsParent
+public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
 {
     #region singleton
     private static GameManager _instance = null;
@@ -35,31 +37,45 @@ public class GameManager : MonoBehaviour, IGetInstallObjectsParent
     }
     #endregion
     [SerializeField] private GameObject InstalledObjectsParent;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject playerSpawner;
     private void Start()
     {
-        if (!Initialize())
+        if (playerPrefab == null)
         {
-            Debug.LogError("Init() 실패! 컴포넌트를 찾지 못했습니다.");
+            Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
+        }
+        else
+        {
+            if (PlayerManager.LocalPlayerInstance == null)
+            {
+                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                PhotonNetwork.Instantiate(this.playerPrefab.name, playerSpawner.transform.position, Quaternion.identity, 0);
+            }
+            else
+            {
+                Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
+            }
         }
     }
-    private bool Initialize()
+    private void CreatePlayerInstance()
     {
-        if(!FindOnject(ref InstalledObjectsParent, "Installed Objects Parent")) return false;
 
-        return true;
-    }
-
-    private bool FindOnject(ref GameObject gameobject, string findName)
-    {
-        if (gameobject != null) return true;
-        if (transform.Find(findName) == null) return false;
-
-        gameobject = transform.Find(findName).gameObject;
-
-        return true;
     }
     public Transform GetInstallObjectsParent()
     {
         return InstalledObjectsParent.transform;
+    }
+
+
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 }

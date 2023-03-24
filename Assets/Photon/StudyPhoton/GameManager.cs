@@ -7,8 +7,8 @@ namespace Com.MyCompany.MyGame
     public class GameManager : MonoBehaviourPunCallbacks
     {
         [Tooltip("The prefab to use for representing the player")]
-        [SerializeField]
-        private GameObject playerPrefab;
+
+        [SerializeField] private GameObject playerPrefab;
 
         public static GameManager Instance;
         void Start()

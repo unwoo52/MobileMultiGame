@@ -35,6 +35,7 @@ public class CanvasManagement : MonoBehaviour, IGetCanvas
     [SerializeField] private GameObject _quickSlot;
     [SerializeField] private GameObject _variableJoystick;
     [SerializeField] private GameObject _canvas;
+    public GameObject VariableJoystick { get { return _variableJoystick; } }
     public GameObject Inventory { get { return _inventory; } }
     public bool GetCanvasGameObject(ref GameObject gameObject)
     {

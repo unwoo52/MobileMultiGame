@@ -1,13 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using System;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.GraphicsBuffer;
-
 public class PathFinder : MonoBehaviour
 {
     private AnimContoller _anim;
