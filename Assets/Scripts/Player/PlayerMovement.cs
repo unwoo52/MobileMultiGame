@@ -18,19 +18,21 @@ public class PlayerMovement : MonoBehaviourPun
 
     public void FixedUpdate()
     {
-
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
             return;
         }
-        Vector3 target = new Vector3(variableJoystick.Horizontal,0, variableJoystick.Vertical);
 
-        if(variableJoystick.Horizontal == 0 && variableJoystick.Vertical == 0) { animContoller.OnStopMove(); }
+
+
+        Vector3 target = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
+
+
+        if (variableJoystick.Horizontal == 0 && variableJoystick.Vertical == 0) { animContoller.OnStopMove(); }
         else
         {
             animContoller.OnLookat(transform.position + target, RotateSpeed);
             animContoller.OnOnlyMove();
         }
     }
-
 }
