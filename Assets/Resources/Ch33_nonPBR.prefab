@@ -1778,9 +1778,17 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: IsMove
+  - Type: 1
+    SynchronizeType: 0
+    Name: Horizontal
+  - Type: 1
+    SynchronizeType: 0
+    Name: Vertical
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!114 &5909198040262937702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1828,7 +1836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variableJoystick: {fileID: 0}
   animContoller: {fileID: 0}
-  RotateSpeed: 10
+  rotateSpeed: 100
 --- !u!114 &5460648947648807924
 MonoBehaviour:
   m_ObjectHideFlags: 0
