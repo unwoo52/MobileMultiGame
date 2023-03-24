@@ -15,4 +15,6 @@ public class AnimContoller : AnimMovement
     public Action OnExitWanderWalk => ExitWanderWalk;
     public Action<Vector3, float> OnLookat => Lookat;
     public Action OnScream => Scream;
+    public Action<float> OnSetVerticalParam => SetVerticalParam;
+    public Action<float> OnSetHorizontalParam => SetHorizontalParam;
 }

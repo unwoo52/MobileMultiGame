@@ -79,7 +79,14 @@ public class AnimMovement : MonoBehaviour
     {
         _animator.SetTrigger("ExitWanderWalk");
     }
-
+    protected void SetVerticalParam(float value)
+    {
+        _animator.SetFloat("Vertical", value);
+    }
+    protected void SetHorizontalParam(float value)
+    {
+        _animator.SetFloat("Horizontal", value);
+    }
 
 
     IEnumerator LookatCorutine(Vector3 Target, float lookspeed)

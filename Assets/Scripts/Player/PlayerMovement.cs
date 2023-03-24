@@ -31,8 +31,8 @@ public class PlayerMovement : MonoBehaviourPun
         if (variableJoystick.Horizontal == 0 && variableJoystick.Vertical == 0) { animContoller.OnStopMove(); }
         else
         {
-            animContoller.OnLookat(transform.position + target, RotateSpeed);
-            animContoller.OnOnlyMove();
+            animContoller.OnSetVerticalParam(variableJoystick.Vertical);
+            animContoller.OnSetHorizontalParam(variableJoystick.Horizontal);
         }
     }
 }
