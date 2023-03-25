@@ -5,7 +5,7 @@ using UnityEngine;
 public class ZombieFSM_Idle : ZombieFSM_Base
 {
     private Coroutine idleCorutine = null;
-    public void EndStateBehavior()
+    public override void EndStateBehavior()
     {
         StopCoroutine(idleCorutine);
         _zombieFSM.Anim.OnExitWanderWalk();
@@ -13,12 +13,12 @@ public class ZombieFSM_Idle : ZombieFSM_Base
         //StopCoroutine(_zombieFSM.AnimMove.LookCorutine);
     }
 
-    public void StartStateBehavior()
+    public override void StartStateBehavior()
     {
         if(idleCorutine != null) { StopCoroutine(idleCorutine); }
         idleCorutine = StartCoroutine(IdelRandomMove());
     }
-    public void StateMachine()
+    public override void StateMachine()
     {
     }
 

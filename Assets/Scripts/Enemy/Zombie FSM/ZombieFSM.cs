@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ZombieFSM : MonoBehaviour, ILostTarget
 {
-    [SerializeField] private ZombieFSM_Idle _zombieFSM_Idle;
-    [SerializeField] private ZombieFSM_Tracking _zombieFSM_Tracking;
+    [SerializeField] private ZombieFSM_Base _zombieFSM_Start;
+    [SerializeField] private ZombieFSM_Base _zombieFSM_Idle;
+    [SerializeField] private ZombieFSM_Base _zombieFSM_Tracking;
     [SerializeField] private AnimContoller _anim;
     [SerializeField] private TrackingScript trackingScript;
+    [SerializeField] private ZOMBIEBEHAVIOR InitState;
     public AnimContoller Anim { get => _anim; }
     public TrackingScript TrackingScript => trackingScript;
     public enum ZOMBIEBEHAVIOR
     {
-        Start,
+        Start, // 스폰 될 때
         Idle, // 배회. 주변을 배회
         curiosity, // 호기심. 소음에 이끌려 좀비가 모일 때 발동
         Attck, // 플레이어가 설치한 오브젝트를 발견하고 공격할 때
@@ -21,14 +23,14 @@ public class ZombieFSM : MonoBehaviour, ILostTarget
         Death//온전한 사망. 잠시 후 시체가 사라짐
     }
 
-    private ZOMBIEBEHAVIOR _currentState = ZOMBIEBEHAVIOR.Start;
+    private ZOMBIEBEHAVIOR _currentState;
 
     private void Start()
     {
-        if(!Initialize()) 
+        _currentState = InitState;
+        if (!Initialize()) 
             Debug.LogError("Init() 실패! 컴포넌트를 찾지 못했습니다.");
-
-        ChangerState(ZOMBIEBEHAVIOR.Idle); 
+        StartStateBehavior();
     }
 
     private void Update()
@@ -49,6 +51,7 @@ public class ZombieFSM : MonoBehaviour, ILostTarget
         switch (_currentState)
         {
             case ZOMBIEBEHAVIOR.Start:
+                _zombieFSM_Start.StateMachine();
                 break;
             case ZOMBIEBEHAVIOR.Idle:
                 _zombieFSM_Idle.StateMachine();
@@ -72,6 +75,7 @@ public class ZombieFSM : MonoBehaviour, ILostTarget
         switch (_currentState)
         {
             case ZOMBIEBEHAVIOR.Start:
+                _zombieFSM_Start.EndStateBehavior();
                 break;
             case ZOMBIEBEHAVIOR.Idle:
                 _zombieFSM_Idle.EndStateBehavior();
@@ -95,6 +99,7 @@ public class ZombieFSM : MonoBehaviour, ILostTarget
         switch (_currentState)
         {
             case ZOMBIEBEHAVIOR.Start:
+                _zombieFSM_Start.StartStateBehavior();
                 break;
             case ZOMBIEBEHAVIOR.Idle:
                 _zombieFSM_Idle.StartStateBehavior();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17673063, g: 0.2212199, b: 0.3035179, a: 1}
+  m_IndirectSpecularColor: {r: 0.17023727, g: 0.20263496, b: 0.23855464, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11072,14 +11072,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415924613}
-  m_LocalRotation: {x: 0.8227051, y: -0.13561752, z: 0.22044313, w: 0.50613153}
+  m_LocalRotation: {x: 0.9628817, y: -0.020531898, z: 0.25800332, w: 0.0766261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 116.8, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 170.9, y: -30, z: 0}
 --- !u!1001 &415927362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29258,7 +29258,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1550191524}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1130086544
+--- !u!114 &1130086545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29267,15 +29267,56 @@ MonoBehaviour:
   m_GameObject: {fileID: 1130086541}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31ac1fde0e9d5954ba6e0358cdebe825, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d4ca6882b5679b409dee92d73c35db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  directionalLight: {fileID: 415924614}
-  time: 10
-  nightLightValue: 0.05
-  noonLightValue: 2
+  spawnerList:
+  - {fileID: 1276875942}
+--- !u!114 &1130086548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130086541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5e6fb03e673d14f8181134a3d57208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   CallBackBehaviorScripts:
-  - {fileID: 0}
+  - {fileID: 1130086545}
+  directionalLight: {fileID: 415924614}
+  timePeriods:
+  - name: morning
+    startTime: 0.9
+    endTime: 0.1
+    angleStart: 350
+    angleEnd: 10
+    lightValueStart: 0.1
+    lightValueEnd: 2
+  - name: Noon
+    startTime: 0.1
+    endTime: 0.2
+    angleStart: 10
+    angleEnd: 170
+    lightValueStart: 2
+    lightValueEnd: 2
+  - name: twillight
+    startTime: 0.2
+    endTime: 0.3
+    angleStart: 170
+    angleEnd: 190
+    lightValueStart: 2
+    lightValueEnd: 0.1
+  - name: Night
+    startTime: 0.3
+    endTime: 0.9
+    angleStart: 190
+    angleEnd: 350
+    lightValueStart: 0.1
+    lightValueEnd: 0.1
+  cycleDuration: 0.1
 --- !u!1001 &1130564374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32723,6 +32764,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1276875943}
+  - component: {fileID: 1276875944}
   m_Layer: 0
   m_Name: ZombieSpawner (1)
   m_TagString: Untagged
@@ -32745,6 +32787,18 @@ Transform:
   m_Father: {fileID: 835437344}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1276875944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276875942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0cf52618b282694e8c303945af32a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1280228580
 PrefabInstance:
   m_ObjectHideFlags: 0

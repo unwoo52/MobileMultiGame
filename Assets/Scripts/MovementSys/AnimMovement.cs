@@ -70,14 +70,18 @@ public class AnimMovement : MonoBehaviour
         _animator.SetTrigger("TriggerScream");
     }
 
-    protected void WanderWalk()
+    protected void SetTrigger_WanderWalk()
     {
         _animator.SetTrigger("WanderWalk");
     }
 
-    protected void ExitWanderWalk()
+    protected void SetTrigger_ExitWanderWalk()
     {
         _animator.SetTrigger("ExitWanderWalk");
+    }
+    protected void SetTrigger_Spawn()
+    {
+        _animator.SetTrigger("TriggerSpawn");
     }
     protected void SetVerticalParam(float value)
     {

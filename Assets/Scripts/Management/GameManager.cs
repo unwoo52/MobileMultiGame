@@ -8,7 +8,7 @@ public interface IGetInstallObjectsParent
 {
     Transform GetInstallObjectsParent();
 }
-public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent, IMorningCallback
+public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
 {
     #region singleton
     private static GameManager _instance = null;
@@ -60,10 +60,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent, 
             }
         }
     }
-    private void CreatePlayerInstance()
-    {
-
-    }
     public Transform GetInstallObjectsParent()
     {
         return InstalledObjectsParent.transform;
@@ -78,10 +74,5 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent, 
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-    }
-
-    public void MorningCallback()
-    {
-        Debug.Log("TEST");
     }
 }

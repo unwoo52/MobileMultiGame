@@ -7,15 +7,15 @@ public class ZombieFSM_Tracking : ZombieFSM_Base
     private GameObject target = null;
     private float distance;
     [SerializeField]private float attackRange;
-    public void EndStateBehavior()
+    public override void EndStateBehavior()
     {
     }
 
-    public void StartStateBehavior()
+    public override void StartStateBehavior()
     {
         target = _zombieFSM.TrackingScript.GameOnjects[0];
     }
-    public void StateMachine()
+    public override void StateMachine()
     {
         _zombieFSM.Anim.OnMove(target.transform.position);
 

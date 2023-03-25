@@ -2460,6 +2460,7 @@ GameObject:
   - component: {fileID: 8464231566878522012}
   - component: {fileID: 8464231566878522013}
   - component: {fileID: 8464231566878522014}
+  - component: {fileID: 75941117}
   m_Layer: 0
   m_Name: Warzombie F Pedroso
   m_TagString: Untagged
@@ -2578,6 +2579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21e6a4bbc7172304486ec5a84ef1cacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zombieFSM_Start: {fileID: 75941117}
   _zombieFSM_Idle: {fileID: 8464231566878522012}
   _zombieFSM_Tracking: {fileID: 8464231566878522011}
   _anim: {fileID: 8464231566878522014}
@@ -2595,6 +2597,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 2602069490190616326}
+--- !u!114 &75941117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770641604969760710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7b802fab76d1ae40bd6d979bd60cbfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _zombieFSM: {fileID: 8464231566878522013}
 --- !u!1 &8823674681427879069
 GameObject:
   m_ObjectHideFlags: 0
