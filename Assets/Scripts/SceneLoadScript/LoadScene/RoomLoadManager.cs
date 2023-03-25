@@ -58,7 +58,7 @@ public class RoomLoadManager : MonoBehaviourPunCallbacks
 
             // #Critical
             // Load the Room Level. 
-            PhotonNetwork.LoadLevel("Map_v2 1");
+            PhotonNetwork.LoadLevel("TEST");
         }
     }
 }
