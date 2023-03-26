@@ -8,7 +8,7 @@ public class ZombieSpawner : MonoBehaviourPunCallbacks, IGetZombieSpawner
     
     public void GetZombieSpawner()
     {
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/Warzombie F Pedroso");
+        GameObject prefab = Resources.Load<GameObject>("Warzombie F Pedroso");
         if(PhotonNetwork.IsConnected == false)
         {
             Instantiate(prefab, transform.position, Quaternion.identity);

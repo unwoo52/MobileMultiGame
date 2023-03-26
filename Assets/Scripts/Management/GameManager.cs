@@ -36,7 +36,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
         }
     }
     #endregion
-    [SerializeField] private GameObject InstalledObjectsParent;
+    [SerializeField] private GameObject PlayerInstalledObjectsParent;
+    [SerializeField] private GameObject EnemyInstalledParent;
+
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerSpawner;
 
@@ -62,7 +64,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     }
     public Transform GetInstallObjectsParent()
     {
-        return InstalledObjectsParent.transform;
+        return PlayerInstalledObjectsParent.transform;
+    }
+    public Transform GetEnemyInstalledParent()
+    {
+        return EnemyInstalledParent.transform;
     }
 
 

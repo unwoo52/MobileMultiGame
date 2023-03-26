@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class ZombieSpawnerManager : MonoBehaviour, IMorningCallback, INightCallb
     [SerializeField] List<GameObject> spawnerList;
     public void MorningCallback()
     {
-        Debug.Log("Morning!");
+        StartCoroutine(DestroyZombie());
     }
 
     public void NightCallback()
@@ -19,8 +20,32 @@ public class ZombieSpawnerManager : MonoBehaviour, IMorningCallback, INightCallb
         Debug.Log("Night!");
         foreach (GameObject spawner in spawnerList)
         {
-            spawner.TryGetComponent(out IGetZombieSpawner zombieSpawner);
-            zombieSpawner.GetZombieSpawner();
+            for(int i = 0; i < 10; i++)
+            {
+                Vector3 tempPos = new Vector3(Random.Range(0, 10), 0, Random.Range(0, 10));
+                GameObject prefab = Resources.Load<GameObject>("Warzombie F Pedroso");
+                if (PhotonNetwork.IsConnected == false)
+                {
+                    Instantiate(prefab, spawner.transform.position + tempPos, Quaternion.identity);
+                    continue;
+                }
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    GameObject obj = PhotonNetwork.Instantiate(prefab.name, spawner.transform.position + tempPos, Quaternion.identity, 0);                    
+                    obj.transform.SetParent(GameManager.Instance.GetEnemyInstalledParent());
+                }
+            }
+            
+        }
+    }
+
+    IEnumerator DestroyZombie()
+    {
+        Transform parent = GameManager.Instance.GetEnemyInstalledParent();
+        while (parent.childCount > 0)
+        {
+            Destroy(parent.GetChild(0).gameObject);            
+            yield return null;
         }
     }
 }
