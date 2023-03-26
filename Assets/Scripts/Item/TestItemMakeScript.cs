@@ -8,49 +8,34 @@ using UnityEngine.UIElements;
 
 public class TestItemMakeScript : MonoBehaviour
 {
-    private List<ItemData> itemList = new();
+    [SerializeField] private List<ItemData> itemscriptableList;
+
     private BinaryFormatter binaryFormatter = new();
+
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private GameObject _contentParent;
-    public GameObject ItemPrefab { get { return _itemPrefab; } }
-    public GameObject ContentParent { get { return _contentParent; } }
 
-    public string TestString;
-    public GameObject TestPrefabs;
-    public Sprite TestSprite;
 
     private void Start()
     {
-        AddItem();
-        Initialize();
-    }
-    private void Initialize()
-    {
-        FindOnject(ref _contentParent, "Content Parent");
-    }
-
-    private bool FindOnject(ref GameObject gameobject, string findName)
-    {
-        if (gameobject != null) return true;
-        if (transform.Find(findName) == null) return false;
-
-        gameobject = transform.Find(findName).gameObject;
-
-        return true;
+        foreach(var item in itemscriptableList)
+        {
+            AddItem(item);
+        }
     }
 
     [ContextMenu("AddItem")]
-    public void AddItem()
+    public void AddItem(ItemData scriptableObject)
     {
-
         GameObject InstanteObject = Instantiate(_itemPrefab);
         InstanteObject.transform.SetParent(_contentParent.transform, false);
         InstanteObject.transform.localScale = Vector3.one;
 
-        Item itemScript;
-        InstanteObject.TryGetComponent(out itemScript);
-        itemScript.Initialize();
-        itemScript.SetItemData(TestString, TestPrefabs, TestSprite);
+        if(InstanteObject.TryGetComponent(out Item itemScript))
+        {
+            itemScript.Initialize();
+            itemScript.SetItemData(scriptableObject.ItemName, scriptableObject.ItemPrefab, scriptableObject.ItemImage);
+        }
     }
 
 
@@ -63,7 +48,6 @@ public class TestItemMakeScript : MonoBehaviour
             binaryFormatter.Serialize(fileStream, data);
             fileStream.Close();
         }
-
     }
 
     public T LoadBinary<T>(string filePath)

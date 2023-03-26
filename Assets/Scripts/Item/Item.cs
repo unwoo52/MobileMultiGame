@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using UnityEngine;
 [Serializable]
-public struct ItemData
+public struct ItemDataStruct
 {
     public int itemCount;
     public StringBuilder itemName;
@@ -15,8 +15,8 @@ public interface IGetBuildObject
 }
 public class Item : MonoBehaviour, IGetBuildObject
 {
-    private ItemData _itemData;
-    public ItemData ItemData => _itemData;
+    private ItemDataStruct _itemData;
+    public ItemDataStruct ItemData => _itemData;
     public void Initialize()
     {
         _itemData.itemName = new StringBuilder();
