@@ -10,8 +10,6 @@ public class TestItemMakeScript : MonoBehaviour
 {
     [SerializeField] private List<ItemData> itemscriptableList;
 
-    private BinaryFormatter binaryFormatter = new();
-
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private GameObject _contentParent;
 
@@ -36,35 +34,5 @@ public class TestItemMakeScript : MonoBehaviour
             itemScript.Initialize();
             itemScript.SetItemData(scriptableObject.ItemName, scriptableObject.ItemPrefab, scriptableObject.ItemImage);
         }
-    }
-
-
-    /**/
-    //-------
-    public void SaveBinary<T>(string filePath, T data)
-    {
-        using (FileStream fileStream = File.Create(filePath))
-        {
-            binaryFormatter.Serialize(fileStream, data);
-            fileStream.Close();
-        }
-    }
-
-    public T LoadBinary<T>(string filePath)
-    {
-        T data = default;
-        if (File.Exists(filePath))
-        {
-            using (FileStream fileStream = File.Open(filePath, FileMode.Open))
-            {
-                data = (T)binaryFormatter.Deserialize(fileStream);
-                fileStream.Close();
-            }
-        }
-        else
-        {
-            Debug.LogError(filePath + "파일이 존재하지 않습니다.");
-        }
-        return data;
     }
 }

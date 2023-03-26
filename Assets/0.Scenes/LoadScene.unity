@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 687959194}
   - component: {fileID: 687959193}
   m_Layer: 0
-  m_Name: Room Load Manager
+  m_Name: Photon Room Load Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

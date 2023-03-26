@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerSpawner;
 
+    [SerializeField] private GameObject SaveManager;
+
     private void Start()
     {
         if (playerPrefab == null)
@@ -62,6 +64,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
             }
         }
     }
+
+    [ContextMenu("Do Save Buildings")]
+    public void SaveBuilding()
+    {
+        SaveManager.GetComponent<ISaveData>().SaveData(PlayerInstalledObjectsParent);
+    }
+
     public Transform GetInstallObjectsParent()
     {
         return PlayerInstalledObjectsParent.transform;

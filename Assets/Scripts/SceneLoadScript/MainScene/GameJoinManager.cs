@@ -20,6 +20,8 @@ public class GameJoinManager : MonoBehaviour
 
     public void Connect()
     {
-        SceneManager.LoadScene(1);
+        string gamename = GameLoadManagement.Instance.gamename;
+        string mapName = GameLoadManagement.Instance.mapName;
+        SceneManager.LoadScene(mapName);
     }
 }

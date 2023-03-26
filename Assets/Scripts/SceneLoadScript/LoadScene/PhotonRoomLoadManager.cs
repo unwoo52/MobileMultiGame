@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RoomLoadManager : MonoBehaviourPunCallbacks
+public class PhotonRoomLoadManager : MonoBehaviourPunCallbacks
 {
 
     [Tooltip("게임 룸당 최대 플레이어 수입니다. 방이 꽉 차면 새로운 플레이어가 참여할 수 없으므로 새로운 방이 만들어집니다")]
