@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/0.Scenes/Map/Map_v2 1.unity
     guid: 38e645a02ef8bdd429c85f5d9680ca38
   - enabled: 1
-    path: Assets/0.Scenes/Map/Factory.unity
+    path: Assets/0.Scenes/Map/Map A.unity
     guid: 10e8eae0984543b4882a861892ffad79
   m_configObjects: {}

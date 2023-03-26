@@ -18,10 +18,8 @@ public class GameJoinManager : MonoBehaviour
         Screen.SetResolution(800, 600, false);
     }
 
-    public void Connect()
+    public void Connect(string gamename, string mapname)
     {
-        string gamename = GameLoadManagement.Instance.gamename;
-        string mapName = GameLoadManagement.Instance.mapName;
-        SceneManager.LoadScene(mapName);
+        SceneManager.LoadScene(mapname);
     }
 }

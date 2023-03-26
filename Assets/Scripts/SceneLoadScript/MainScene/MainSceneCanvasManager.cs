@@ -3,11 +3,45 @@ using UnityEngine;
 
 public class MainSceneCanvasManager : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> scenes;
+    #region singleton
+    private static MainSceneCanvasManager _instance = null;
 
-    private void Awake()
+    void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         GoToDefaultScene();
+    }
+    public static MainSceneCanvasManager Instance
+    {
+        get
+        {
+            if (null == _instance)
+            {
+                return null;
+            }
+            return _instance;
+        }
+    }
+    #endregion
+    [SerializeField] private List<GameObject> scenes;
+    [SerializeField] private GameObject _createCanvas;
+    public GameObject CreateCanvas => _createCanvas;
+
+    public void Connect(string gamename, string mapname)
+    {
+        GetComponent<GameJoinManager>().Connect(gamename, mapname);
+    }
+
+    public void SetActive_CreateCanvas(bool isActive)
+    {
+        _createCanvas.SetActive(isActive);
     }
 
     public void GoToGameStartScene()
