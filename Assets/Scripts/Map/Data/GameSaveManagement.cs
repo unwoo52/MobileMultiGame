@@ -1,12 +1,13 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using UnityEngine;
 
 public interface ISaveDatasTESTITEMDATASAVE
 {
-    void SaveDataTESTITEMDATASAVE(GameObject PlayerInstalledObjectsParent);
+    void SaveDataTESTITEMDATASAVE(string filepath, GameObject PlayerInstalledObjectsParent);
 }
 public interface ISaveData
 {
@@ -51,13 +52,17 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
     {
         DontDestroyOnLoad(gameObject);
     }
+    #region interface
+    public List<T> LoadDataAtDirectory<T>(string datapath)
+    {
+        return LoadBinaryFiles<T>(datapath);
+    }
     public void SaveData<T>(string filePath, string filename, T data)
     {
         SaveBinary(filePath, filename, data);
     }
-    public void SaveDataTESTITEMDATASAVE(GameObject PlayerInstalledObjectsParent)
+    public void SaveDataTESTITEMDATASAVE(string filepath, GameObject PlayerInstalledObjectsParent)
     {
-        string filepath = "";
         for (int i = 0; i < PlayerInstalledObjectsParent.transform.childCount; i++)
         {
             Transform _transform = PlayerInstalledObjectsParent.transform.GetChild(i);
@@ -65,6 +70,8 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
             BinarySave_DataAndTransformAndRotate(filepath, _transform.name, itemData, _transform, _transform.rotation);
         }
     }
+
+    #endregion
     public void SaveBinary<T>(string filePath, string filename, T data)
     {
         string directoryPath = filePath;
@@ -122,11 +129,18 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
             {
                 if (Path.GetExtension(filePath) == ".bin")
                 {
-                    using (FileStream fileStream = File.Open(filePath, FileMode.Open))
+                    try
                     {
-                        T data = (T)binaryFormatter.Deserialize(fileStream);
-                        dataList.Add(data);
-                        fileStream.Close();
+                        using (FileStream fileStream = File.Open(filePath, FileMode.Open))
+                        {
+                            T data = (T)binaryFormatter.Deserialize(fileStream);
+                            dataList.Add(data);
+                            fileStream.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogErrorFormat("Error while loading file {0}: {1}", filePath, ex.Message);
                     }
                 }
             }
@@ -146,8 +160,4 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
         }
     }
 
-    public List<T> LoadDataAtDirectory<T>(string datapath)
-    {
-        return LoadBinaryFiles<T>(datapath);
-    }
 }

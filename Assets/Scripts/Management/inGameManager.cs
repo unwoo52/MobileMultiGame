@@ -48,6 +48,7 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     {
 
         CreatePlayer();
+        MapDataLoad();
     }
 
     private void MapDataLoad()
@@ -78,7 +79,12 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [ContextMenu("Do Save Buildings")]
     public void SaveBuilding()
     {
-        SaveManager.GetComponent<ISaveDatasTESTITEMDATASAVE>().SaveDataTESTITEMDATASAVE(PlayerInstalledObjectsParent);
+        string filepath = "";
+        if (SaveManager.TryGetComponent(out ISaveDatasTESTITEMDATASAVE savedataSystem))
+        {
+            savedataSystem.SaveDataTESTITEMDATASAVE(filepath, PlayerInstalledObjectsParent);
+        }
+        else return;
     }
 
     public Transform GetInstallObjectsParent()
