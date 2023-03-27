@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+[System.Serializable]
+public class MapData
+{
+    public string _gameName;
+    public string _mapName;
+}
 public class CreateNewGame : MonoBehaviour
 {
-    [System.Serializable]
-    class MapData
-    {
-        public string _gameName;
-        public string _mapName;
-    }
+    
     [SerializeField]
     private GameObject newGamePrefab;
     [SerializeField]
     private Transform ContentParent;
     [SerializeField]
     private GameObject gameSaveManager;
-    MapData _mapdata = new MapData();
-
+    private MapData _mapdata = new MapData();
+    [SerializeField]
+    private string _savegamePath = "Assets/Saved/GameInMainScene";
     public TMP_Dropdown dropdown;
 
     private void Start()
@@ -34,6 +35,11 @@ public class CreateNewGame : MonoBehaviour
                 gameSaveManager = gameSaveManagerObject;
             }
         }
+        LoadSaveGame();
+    }
+    private void LoadSaveGame()
+    {
+        //CreateGame();
     }
 
     private void OnValueChanged(int value)
@@ -57,22 +63,22 @@ public class CreateNewGame : MonoBehaviour
 
     public void CreateGame_EndCreate()
     {
+        CreateGame(_mapdata._gameName, _mapdata._mapName);
+    }
+    private void CreateGame(string gamename, string mapname)
+    {
         GameObject GamePrefab = Instantiate(newGamePrefab, ContentParent);
-        GamePrefab.transform.GetChild(0).GetComponent<TMP_Text>().text = _mapdata._gameName;
-        GamePrefab.GetComponent<ISetSaveGameAddListener>().SetSaveGameAddListener();
-        GamePrefab.GetComponent<ISetGamePanelMapName>().SetGamePanelMapName(_mapdata._mapName);
-        GamePrefab.GetComponent<ISetGamePanelGameName>().SetGamePanelGameName(_mapdata._gameName);
+        GamePrefab.GetComponent<ISetMapdata>().SetMapdata(gamename, mapname);
         MainSceneCanvasManager.Instance.SetActive_CreateCanvas(false);
         SaveCreatedGame();
     }
 
     private void SaveCreatedGame()
     {
-        string filepath = "Assets/Saved/GameInMainScene";
         string filename = $"{_mapdata._gameName}.bin";
         if (gameSaveManager.TryGetComponent(out ISaveData saveData))
         {
-            saveData.SaveData(filepath, filename, _mapdata);
+            saveData.SaveData(_savegamePath, filename, _mapdata);
         }
     }
     public void CancelCreateGame()

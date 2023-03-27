@@ -1,39 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public interface ISetGamePanelGameName
+public interface ISetMapdata
 {
-    void SetGamePanelGameName(string name);
-}
-public interface ISetGamePanelMapName
-{
-    void SetGamePanelMapName(string mapName);
-}
-public interface ISetSaveGameAddListener
-{
-    void SetSaveGameAddListener();
+    void SetMapdata(string gamename, string mapname);
 }
 
-public class SavedGame : MonoBehaviour, ISetGamePanelGameName, ISetGamePanelMapName, ISetSaveGameAddListener
+public class SavedGame : MonoBehaviour, ISetMapdata
 {
     private string _gameName;
     private string _mapName;
-    public void SetGamePanelMapName(string mapName)
+    public void SetMapdata(string gamename, string mapname)
     {
-        _mapName = mapName;
-    }
-
-    public void SetGamePanelGameName(string gameName)
-    {
-        _gameName = gameName;
-    }
-
-    public void SetSaveGameAddListener()
-    {
+        transform.GetChild(0).GetComponent<TMP_Text>().text = gamename;
+        _mapName = mapname;
+        _gameName = gamename;
         Button button = GetComponent<Button>();
-
         if (button != null)
         {
             // On Click 이벤트에 대한 설정을 합니다.
