@@ -1717,6 +1717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82af8cd0d1c1ec8478d3d24fe1e89bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _CreateGameCanvas: {fileID: 0}
   newGamePrefab: {fileID: 2556027781618420987, guid: d5955c6aa1d83c1488e62729d6a2347f,
     type: 3}
   ContentParent: {fileID: 536690858}
@@ -5810,6 +5811,7 @@ GameObject:
   - component: {fileID: 1419611499}
   - component: {fileID: 1419611498}
   - component: {fileID: 1419611497}
+  - component: {fileID: 1419611500}
   m_Layer: 5
   m_Name: Ceate Game Canvas
   m_TagString: Untagged
@@ -5905,6 +5907,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1419611500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419611495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beedf4758477858418088fd4e9220d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1455958305
 GameObject:
   m_ObjectHideFlags: 0

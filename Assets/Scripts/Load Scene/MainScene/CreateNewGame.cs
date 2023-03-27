@@ -11,7 +11,9 @@ public class MapData
 }
 public class CreateNewGame : MonoBehaviour
 {
-    
+
+    [SerializeField]
+    private GameObject _CreateGameCanvas;
     [SerializeField]
     private GameObject newGamePrefab;
     [SerializeField]
@@ -39,7 +41,17 @@ public class CreateNewGame : MonoBehaviour
     }
     private void LoadSaveGame()
     {
-        //CreateGame();
+        List<MapData> list;
+        if (gameSaveManager.TryGetComponent(out ILoadDataAtDirectory loadDataAtDirectory))
+        {
+            list = loadDataAtDirectory.LoadDataAtDirectory<MapData>(_savegamePath);
+        }
+        else return;
+
+        foreach(MapData mapdata in list)
+        {
+            CreateGame(mapdata._gameName, mapdata._mapName);
+        }
     }
 
     private void OnValueChanged(int value)
@@ -58,19 +70,42 @@ public class CreateNewGame : MonoBehaviour
     }
     public void CreateGame_StartCreate()
     {
-        MainSceneCanvasManager.Instance.SetActive_CreateCanvas(true);
+        SetActiveCreateCanvas(true);
     }
+    private bool SetActiveCreateCanvas(bool isActive)
+    {
+        if (_CreateGameCanvas != null && _CreateGameCanvas.TryGetComponent(out ISetActive_CreateCanvas setActive_CreateCanvas))
+        {
+            setActive_CreateCanvas.SetActive_CreateCanvas(isActive);
+        }
+        else if (_CreateGameCanvas == null)
+        {
+            MainSceneCanvasManager.Instance.SetActive_CreateCanvas(isActive);
+        }
+        else return false;
 
+        return true;
+    }
     public void CreateGame_EndCreate()
     {
         CreateGame(_mapdata._gameName, _mapdata._mapName);
     }
-    private void CreateGame(string gamename, string mapname)
+    private bool CreateGame(string gamename, string mapname)
     {
         GameObject GamePrefab = Instantiate(newGamePrefab, ContentParent);
-        GamePrefab.GetComponent<ISetMapdata>().SetMapdata(gamename, mapname);
-        MainSceneCanvasManager.Instance.SetActive_CreateCanvas(false);
+        if (GamePrefab == null) return false;
+
+        if (GamePrefab.TryGetComponent(out ISetMapdata isetMapdata))
+        {
+            isetMapdata.SetMapdata(gamename, mapname);
+        }
+        else return false;
+
+
+        SetActiveCreateCanvas(false);
         SaveCreatedGame();
+
+        return true;
     }
 
     private void SaveCreatedGame()
@@ -85,6 +120,6 @@ public class CreateNewGame : MonoBehaviour
     {
         _mapdata._mapName = "Map A";
         _mapdata._gameName = null;
-        MainSceneCanvasManager.Instance.SetActive_CreateCanvas(false);
+        SetActiveCreateCanvas(false);
     }
 }

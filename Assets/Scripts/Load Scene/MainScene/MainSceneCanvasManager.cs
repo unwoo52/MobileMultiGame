@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MainSceneCanvasManager : MonoBehaviour
+public interface ISetActive_CreateCanvas
+{
+    void SetActive_CreateCanvas(bool param);
+}
+public class MainSceneCanvasManager : MonoBehaviour, ISetActive_CreateCanvas
 {
     #region singleton
     private static MainSceneCanvasManager _instance = null;
@@ -32,17 +35,16 @@ public class MainSceneCanvasManager : MonoBehaviour
     #endregion
     [SerializeField] private List<GameObject> scenes;
     [SerializeField] private GameObject _createCanvas;
-    public GameObject CreateCanvas => _createCanvas;
+    public void SetActive_CreateCanvas(bool isActive)
+    {
+        _createCanvas.SetActive(isActive);
+    }
 
     public void Connect(string gamename, string mapname)
     {
         GetComponent<GameJoinManager>().Connect(gamename, mapname);
     }
 
-    public void SetActive_CreateCanvas(bool isActive)
-    {
-        _createCanvas.SetActive(isActive);
-    }
 
     public void GoToGameStartScene()
     {
@@ -81,4 +83,5 @@ public class MainSceneCanvasManager : MonoBehaviour
             sceneObject.SetActive(isActive);
         }
     }
+
 }

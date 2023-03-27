@@ -12,7 +12,11 @@ public interface ISaveData
 {
     void SaveData<T>(string filePath, string filename, T data);
 }
-public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISaveData
+public interface ILoadDataAtDirectory
+{
+    List<T> LoadDataAtDirectory<T>(string datapath);
+}
+public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISaveData, ILoadDataAtDirectory
 {
     #region singleton
     private static GameSaveManagement _instance = null;
@@ -116,12 +120,13 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
         {
             foreach (string filePath in Directory.GetFiles(directoryPath))
             {
-                if (Path.GetExtension(filePath) == ".dat")
+                if (Path.GetExtension(filePath) == ".bin")
                 {
                     using (FileStream fileStream = File.Open(filePath, FileMode.Open))
                     {
                         T data = (T)binaryFormatter.Deserialize(fileStream);
                         dataList.Add(data);
+                        fileStream.Close();
                     }
                 }
             }
@@ -141,4 +146,8 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
         }
     }
 
+    public List<T> LoadDataAtDirectory<T>(string datapath)
+    {
+        return LoadBinaryFiles<T>(datapath);
+    }
 }
