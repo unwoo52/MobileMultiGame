@@ -32,7 +32,7 @@ public class ZombieSpawnerManager : MonoBehaviour, IMorningCallback, INightCallb
                 if (PhotonNetwork.IsMasterClient)
                 {
                     GameObject obj = PhotonNetwork.Instantiate(prefab.name, spawner.transform.position + tempPos, Quaternion.identity, 0);                    
-                    obj.transform.SetParent(GameManager.Instance.GetEnemyInstalledParent());
+                    obj.transform.SetParent(inGameManager.Instance.GetEnemyInstalledParent());
                 }
             }
             
@@ -41,7 +41,7 @@ public class ZombieSpawnerManager : MonoBehaviour, IMorningCallback, INightCallb
 
     IEnumerator DestroyZombie()
     {
-        Transform parent = GameManager.Instance.GetEnemyInstalledParent();
+        Transform parent = inGameManager.Instance.GetEnemyInstalledParent();
         while (parent.childCount > 0)
         {
             Destroy(parent.GetChild(0).gameObject);            

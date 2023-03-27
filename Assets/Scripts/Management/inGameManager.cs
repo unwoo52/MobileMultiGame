@@ -8,10 +8,10 @@ public interface IGetInstallObjectsParent
 {
     Transform GetInstallObjectsParent();
 }
-public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
+public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
 {
     #region singleton
-    private static GameManager _instance = null;
+    private static inGameManager _instance = null;
 
     void Awake()
     {
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
             Destroy(this.gameObject);
         }
     }
-    public static GameManager Instance
+    public static inGameManager Instance
     {
         get
         {
@@ -45,6 +45,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [SerializeField] private GameObject SaveManager;
 
     private void Start()
+    {
+
+        CreatePlayer();
+    }
+
+    private void MapDataLoad()
+    {
+
+    }
+    private void CreatePlayer()
     {
         if (playerPrefab == null)
         {
@@ -68,7 +78,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [ContextMenu("Do Save Buildings")]
     public void SaveBuilding()
     {
-        SaveManager.GetComponent<ISaveData>().SaveData(PlayerInstalledObjectsParent);
+        SaveManager.GetComponent<ISaveDatasTESTITEMDATASAVE>().SaveDataTESTITEMDATASAVE(PlayerInstalledObjectsParent);
     }
 
     public Transform GetInstallObjectsParent()

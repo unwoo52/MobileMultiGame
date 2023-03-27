@@ -11,6 +11,7 @@ public class GameJoinManager : MonoBehaviour
         // #Critical
         // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
         PhotonNetwork.AutomaticallySyncScene = true;
+        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
@@ -20,6 +21,8 @@ public class GameJoinManager : MonoBehaviour
 
     public void Connect(string gamename, string mapname)
     {
-        SceneManager.LoadScene(mapname);
+        GameSaveManagement.Instance.mapname= mapname;
+        GameSaveManagement.Instance.gamename=gamename;
+        SceneManager.LoadScene("LoadScene");
     }
 }

@@ -39802,9 +39802,10 @@ PrefabInstance:
     - target: {fileID: 4283775650387079047, guid: 09152c012235a704ca971ebc20a49dde,
         type: 3}
       propertyPath: m_Name
-      value: GameManager
+      value: InGameManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2257431543318425725, guid: 09152c012235a704ca971ebc20a49dde, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 09152c012235a704ca971ebc20a49dde, type: 3}
 --- !u!4 &1550191525 stripped
 Transform:
@@ -39812,6 +39813,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1550191524}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1550191526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130086541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976ad130ab9d19640ac82fdaa320bc9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerInstalledObjectsParent: {fileID: 1629825307}
+  EnemyInstalledParent: {fileID: 5796929345402311901}
+  playerPrefab: {fileID: 5670689508795396042, guid: b2459a0b9538bba45bbb9b38bc0b44ee,
+    type: 3}
+  playerSpawner: {fileID: 1165055053}
+  SaveManager: {fileID: 3319994424903772316}
 --- !u!1001 &1555211902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54556,6 +54575,12 @@ PrefabInstance:
 --- !u!4 &3319994424903772315 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4968924839016585670, guid: 58ed35b9074d449438c5f57487c4e183,
+    type: 3}
+  m_PrefabInstance: {fileID: 3319994424903772314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3319994424903772316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6966252854805402167, guid: 58ed35b9074d449438c5f57487c4e183,
     type: 3}
   m_PrefabInstance: {fileID: 3319994424903772314}
   m_PrefabAsset: {fileID: 0}

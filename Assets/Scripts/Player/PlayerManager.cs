@@ -53,7 +53,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void LeaveRoom()
     {
-        GameManager.Instance.LeaveRoom();
+        inGameManager.Instance.LeaveRoom();
     }
 
 

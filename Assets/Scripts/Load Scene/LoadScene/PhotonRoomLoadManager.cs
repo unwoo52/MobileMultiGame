@@ -58,7 +58,8 @@ public class PhotonRoomLoadManager : MonoBehaviourPunCallbacks
 
             // #Critical
             // Load the Room Level. 
-            PhotonNetwork.LoadLevel("TEST");
+            string mapName = GameSaveManagement.Instance.mapname;
+            PhotonNetwork.LoadLevel(mapName);
         }
     }
 }
