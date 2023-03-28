@@ -2,7 +2,7 @@ using System.Text;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item Data", menuName = "Scriptable Object/Item Data", order = int.MaxValue)]
-public class ItemData : ScriptableObject
+public class BuidingItemData : ScriptableObject
 {
     [SerializeField]
     private string _itemName;
@@ -24,4 +24,8 @@ public class ItemData : ScriptableObject
     [SerializeField]
     private int _itemCode;
     public int ItemCode { get { return _itemCode; } }
+
+    [SerializeField]
+    private float _hp;
+    public float HP { get { return _hp; } }
 }

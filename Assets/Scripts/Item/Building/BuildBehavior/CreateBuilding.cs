@@ -9,7 +9,7 @@ public interface ICancelbuild
 }
 public interface ICreateBuilding
 {
-    void CreateBuildObject(GameObject gameobject);
+    void CreateBuildObject(BuidingItemData itemdata);
 }
 public interface ISetBuildObjectPos
 {
@@ -24,6 +24,7 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild, ICreateBuilding, ISet
 {
     [SerializeField] GameObject buildObject;
     [SerializeField] Building building;
+    BuidingItemData _itemData;
     public bool CancelBuildObject()
     {
         Destroy(this);
@@ -32,13 +33,20 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild, ICreateBuilding, ISet
 
     public void CompleteBuildObject()
     {
-        building.buildingObject = buildObject;
+        building._itemdata = _itemData;
         Destroy(this);
     }
 
-    public void CreateBuildObject(GameObject gameobject)
+    public void CreateBuildObject(BuidingItemData itemData)
     {
-        buildObject = Instantiate(gameobject, this.transform);
+        _itemData = itemData;
+        InstantiateBuilding();
+        
+    }
+
+    private void InstantiateBuilding()
+    {
+        buildObject = Instantiate(_itemData.ItemPrefab, transform);
     }
 
     

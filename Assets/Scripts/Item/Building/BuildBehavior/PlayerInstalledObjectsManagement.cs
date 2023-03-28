@@ -24,12 +24,15 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             GameObject gameObject = transform.GetChild(i).gameObject; // i번째 자식 오브젝트의 Transform을 가져옴
-
+            BuidingItemData itemData;
 
             buildObjectData.transform = gameObject.transform;
-            if (gameObject.TryGetComponent(out IGetBuildingName getBuildingName)) getBuildingName.GetBuildingName(out string name);
-            buildObjectData.name = name;
-
+            if (gameObject.TryGetComponent(out IGetItemData getItemData))
+            {
+                itemData = getItemData.GetItemData();
+                buildObjectData.name = itemData.ItemName;
+                buildObjectData.itemcode = itemData.ItemCode;
+            }
             childObjects.Add(buildObjectData);
         }
         string str = JsonUtility.ToJson(childObjects[0]);

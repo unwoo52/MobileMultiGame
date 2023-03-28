@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public interface IGetBuildingName
+
+public class Building : MonoBehaviour, IGetItemData
 {
-    void GetBuildingName(out string name);
-}
-public class Building : MonoBehaviour, IGetBuildingName
-{
-    public GameObject buildingObject;
-    public void GetBuildingName(out string name)
+    public BuidingItemData _itemdata;
+
+    public BuidingItemData GetItemData()
     {
-        name = buildingObject.name;
+        return _itemdata;
     }
 }

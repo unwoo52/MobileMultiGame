@@ -66,16 +66,16 @@ public class BuildingItemUsingSyetem : ItemUsingSystem
 
         //CreateBuildObject 기능은 위에 코드에서 만든 object의 스크립트에게 이관
             //설치할 건물 데이터 불러오기
-        if (!GetBuildObjectAtItemData(out GameObject gameobject)) return false;
+        if (!GetBuildObjectAtItemData(out BuidingItemData itemData)) return false;
             //CreateBuildObject
-        buildObject.GetComponent<ICreateBuilding>().CreateBuildObject(gameobject);
+        buildObject.GetComponent<ICreateBuilding>().CreateBuildObject(itemData);
 
         return true;
     }
 
-    private bool GetBuildObjectAtItemData(out GameObject gameObject)
+    private bool GetBuildObjectAtItemData(out BuidingItemData itemdata)
     {
-        gameObject = transform.parent.GetComponent<IGetBuildObject>().GetbuildObject();
+        itemdata = transform.parent.GetComponent<IGetItemData>().GetItemData();
         return true;
     }
 }

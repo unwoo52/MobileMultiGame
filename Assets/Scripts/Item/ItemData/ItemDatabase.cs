@@ -5,12 +5,12 @@ using UnityEngine;
 public class ItemDatabase : ScriptableObject, ISerializationCallbackReceiver // ISerializationCallbackReceiver - 직렬화 역직렬화 수동처리 콜백용
 {
 
-    public ItemData[] Items;
-    public Dictionary<int, ItemData> GetItem = new Dictionary<int, ItemData>();
+    public BuidingItemData[] Items;
+    public Dictionary<int, BuidingItemData> GetItem = new Dictionary<int, BuidingItemData>();
     public void OnAfterDeserialize()
     {
         int i = 0;
-        foreach (ItemData item in Items)
+        foreach (BuidingItemData item in Items)
         {
             //item.ItemCode = i;
             GetItem.Add(i, item);
@@ -19,6 +19,6 @@ public class ItemDatabase : ScriptableObject, ISerializationCallbackReceiver // 
     }
     public void OnBeforeSerialize()
     {
-        GetItem = new Dictionary<int, ItemData>();
+        GetItem = new Dictionary<int, BuidingItemData>();
     }
 }
