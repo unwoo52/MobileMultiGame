@@ -79,12 +79,8 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [ContextMenu("Do Save Buildings")]
     public void SaveBuilding()
     {
-        string filepath = "";
-        if (SaveManager.TryGetComponent(out ISaveDatasTESTITEMDATASAVE savedataSystem))
-        {
-            savedataSystem.SaveDataTESTITEMDATASAVE(filepath, PlayerInstalledObjectsParent);
-        }
-        else return;
+        //enemy data save
+        //instante building save
     }
 
     public Transform GetInstallObjectsParent()

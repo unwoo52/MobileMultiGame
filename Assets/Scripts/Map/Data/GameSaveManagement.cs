@@ -5,10 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
 
-public interface ISaveDatasTESTITEMDATASAVE
-{
-    void SaveDataTESTITEMDATASAVE(string filepath, GameObject PlayerInstalledObjectsParent);
-}
 public interface ISaveData
 {
     void SaveData<T>(string filePath, string filename, T data);
@@ -17,7 +13,7 @@ public interface ILoadDataAtDirectory
 {
     List<T> LoadDataAtDirectory<T>(string datapath);
 }
-public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISaveData, ILoadDataAtDirectory
+public class GameSaveManagement : MonoBehaviour, ISaveData, ILoadDataAtDirectory
 {
     #region singleton
     private static GameSaveManagement _instance = null;
@@ -45,6 +41,7 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
         }
     }
     #endregion
+
     private BinaryFormatter binaryFormatter = new();
     public string gamename, mapname;
 
@@ -52,6 +49,7 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
     {
         DontDestroyOnLoad(gameObject);
     }
+
     #region interface
     public List<T> LoadDataAtDirectory<T>(string datapath)
     {
@@ -61,18 +59,17 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
     {
         SaveBinary(filePath, filename, data);
     }
-    public void SaveDataTESTITEMDATASAVE(string filepath, GameObject PlayerInstalledObjectsParent)
-    {
-        for (int i = 0; i < PlayerInstalledObjectsParent.transform.childCount; i++)
-        {
-            Transform _transform = PlayerInstalledObjectsParent.transform.GetChild(i);
-            ItemData itemData = _transform.GetComponent<ItemData>();
-            BinarySave_DataAndTransformAndRotate(filepath, _transform.name, itemData, _transform, _transform.rotation);
-        }
-    }
 
     #endregion
-    public void SaveBinary<T>(string filePath, string filename, T data)
+
+    #region private codes
+    private bool ToJsonUtillity<T>(out string str, T data)
+    {
+        str = JsonUtility.ToJson(data);
+        return true;
+    }
+
+    private void SaveBinary<T>(string filePath, string filename, T data)
     {
         string directoryPath = filePath;
         string combinedFilePath = Path.Combine(directoryPath, filename);
@@ -85,22 +82,6 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
         }
     }
 
-
-    private void BinarySave_DataAndTransformAndRotate<T>(string filePath, string filename, T data, Transform transform, Quaternion rotate)
-    {
-        string directoryPath = filePath;
-        string combinedFilePath = Path.Combine(directoryPath, filename);
-
-        CreateDirectoryIfNotExists(directoryPath);
-
-        using (FileStream fileStream = File.Create(combinedFilePath))
-        {
-            binaryFormatter.Serialize(fileStream, data);
-            binaryFormatter.Serialize(fileStream, transform.position);
-            binaryFormatter.Serialize(fileStream, transform.rotation);
-            binaryFormatter.Serialize(fileStream, rotate);
-        }
-    }
 
     private T LoadBinary<T>(string filePath)
     {
@@ -159,5 +140,5 @@ public class GameSaveManagement : MonoBehaviour, ISaveDatasTESTITEMDATASAVE, ISa
             Directory.CreateDirectory(directoryPath);
         }
     }
-
+    #endregion
 }

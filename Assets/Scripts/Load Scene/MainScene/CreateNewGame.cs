@@ -22,11 +22,12 @@ public class CreateNewGame : MonoBehaviour
     private GameObject gameSaveManager;
     private MapData _mapdata = new MapData();
     [SerializeField]
-    private string _savegamePath = "Assets/Saved/GameInMainScene";
+    private string _savegamePath;
     public TMP_Dropdown dropdown;
 
     private void Start()
     {
+        _savegamePath = Application.dataPath + "/Saved/GameInMainScene";
         dropdown.onValueChanged.AddListener(OnValueChanged);
         _mapdata._mapName = "Map A";
         if(gameSaveManager == null)

@@ -19,9 +19,11 @@ public interface ICompleteBuild
 {
     void CompleteBuildObject();
 }
-public class UnderConstructionBuildingController : MonoBehaviour, ICancelbuild, ICreateBuilding, ISetActive, ISetBuildObjectPos, ICompleteBuild
+
+public class CreateBuilding : MonoBehaviour, ICancelbuild, ICreateBuilding, ISetActive, ISetBuildObjectPos, ICompleteBuild
 {
     [SerializeField] GameObject buildObject;
+    [SerializeField] Building building;
     public bool CancelBuildObject()
     {
         Destroy(this);
@@ -30,15 +32,16 @@ public class UnderConstructionBuildingController : MonoBehaviour, ICancelbuild, 
 
     public void CompleteBuildObject()
     {
-        //change parent to igmt
-        buildObject.transform.SetParent(transform.parent);
+        building.buildingObject = buildObject;
+        Destroy(this);
     }
 
     public void CreateBuildObject(GameObject gameobject)
     {
-        //make Item Object from getitemdata(¿ß¿«¡Ÿ)
         buildObject = Instantiate(gameobject, this.transform);
     }
+
+    
 
     public void SetBuildObjectPos(Vector3 vector3)
     {

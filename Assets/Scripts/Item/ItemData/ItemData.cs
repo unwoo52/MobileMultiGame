@@ -20,4 +20,8 @@ public class ItemData : ScriptableObject
     [SerializeField]
     private Sprite _itemImage;
     public Sprite ItemImage { get { return _itemImage; } }
+
+    [SerializeField]
+    private int _itemCode;
+    public int ItemCode { get { return _itemCode; } }
 }
