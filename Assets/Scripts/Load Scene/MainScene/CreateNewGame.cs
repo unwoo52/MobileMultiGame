@@ -44,6 +44,8 @@ public class CreateNewGame : MonoBehaviour
     {
         List<MapData> list;
         list = DataSaveAndLoad.LoadBinaryFiles<MapData>(_savegamePath);
+        //LoadBinaryFiles 를참조중이니, createnewgame 코드 리팩토링 하거나 아니면 게임 저장을 (게임이름 + 게임 데이터)통합으로 바꿀 때 LoadBinaryFiles도 리뉴얼 하기.
+        //(게임이름 + 게임 데이터)통합으로 바꾼다면, load씬에서 데이터 로드도 끝나면 씬 전환이 이루어지게 해도 괜찮을듯
 
         foreach (MapData mapdata in list)
         {

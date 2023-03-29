@@ -1,5 +1,4 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,7 +33,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #endregion
     [SerializeField] private GameObject _playerInstalledObjectsParent;
     public GameObject PlayerInstalledObjectsParent => _playerInstalledObjectsParent;
-    [SerializeField] private GameObject EnemyInstalledParent;
+    [SerializeField] private GameObject _enemyInstalledParent;
+    public GameObject EnemyInstalledParent => _enemyInstalledParent;
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerSpawner;
@@ -52,10 +52,18 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         if (!_gameDataManager.TryGetComponent(out IAllGameDataLoad loadGameData)) return false;
         long flag = loadGameData.AllGameDataLoad();
-        if (flag == -1) Debug.Log("No data to load as this is the first time the game is being created.");
 
-        return true;
+        //0x1 비트면, 새로 생성된 게임이므로 로드할 데이터가 없기 때문에 true를 리턴
+        if (flag == 0x1)
+        {
+            Debug.Log("No data to load as this is the first time the game is being created.");
+            return true;
+        }
+        if (flag == 0) return true;
+
+        else return false;
     }
+
     private void CreatePlayer()
     {
         if (playerPrefab == null)
@@ -76,19 +84,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
             }
         }
     }
-
-    [ContextMenu("Do Save Buildings")]
-    public void SaveBuilding()
-    {
-        //enemy data save
-        //instante building save
-    }
-
-    public Transform GetEnemyInstalledParent()
-    {
-        return EnemyInstalledParent.transform;
-    }
-
 
     public override void OnLeftRoom()
     {
