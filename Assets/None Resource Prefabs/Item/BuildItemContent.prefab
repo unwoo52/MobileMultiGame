@@ -318,6 +318,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3547527859463091647, guid: c895f4f60540750479ccb79a80c9f9a4,
         type: 3}
+      propertyPath: _buildParent
+      value: 
+      objectReference: {fileID: 8508764221382653003, guid: ca9e933e9a5b6104dbd1f370cf983759,
+        type: 3}
+    - target: {fileID: 3547527859463091647, guid: c895f4f60540750479ccb79a80c9f9a4,
+        type: 3}
       propertyPath: groundLayer.m_Bits
       value: 6208
       objectReference: {fileID: 0}

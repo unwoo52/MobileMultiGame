@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 003931a28c7047c4389a0c2c02af47d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 145b2576e94353b4fbfb6502b0ab0f72, type: 3}
   m_Name: Box
   m_EditorClassIdentifier: 
   _itemName: Box
-  _itemCount: 0
-  _itemPrefab: {fileID: 1000011585897626, guid: 7c04b9808b7b5f746913777f4cb336d4,
-    type: 3}
   _itemImage: {fileID: 21300000, guid: a7083477e6ad4694c94250aa9f7b8b26, type: 3}
   _itemCode: 1
+  _hp: 1000
+  _itemPrefab: {fileID: 1000011585897626, guid: 7c04b9808b7b5f746913777f4cb336d4,
+    type: 3}

@@ -42,18 +42,25 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerSpawner;
 
-    [SerializeField] private GameObject SaveManager;
+    [SerializeField] private GameObject GameDataManager;
 
     private void Start()
     {
-
+        GameDataManager = global::GameDataManager.Instance.gameObject;
         CreatePlayer();
         MapDataLoad();
     }
 
-    private void MapDataLoad()
+    private bool MapDataLoad()
     {
+        /*
+        if (!SaveManager.TryGetComponent(out ))
+        {
 
+        } return false;
+
+        */
+        return true;
     }
     private void CreatePlayer()
     {

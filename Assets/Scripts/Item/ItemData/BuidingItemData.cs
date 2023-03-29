@@ -1,31 +1,14 @@
 using System.Text;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item Data", menuName = "Scriptable Object/Item Data", order = int.MaxValue)]
-public class BuidingItemData : ScriptableObject
+[CreateAssetMenu(fileName = "Buiding Item Data", menuName = "Scriptable Object/Buiding Item Data", order = int.MaxValue)]
+public class BuidingItemData : ItemData
 {
     [SerializeField]
-    private string _itemName;
-    public string ItemName { get { return _itemName; } }
-
-
-    [SerializeField]
-    private int _itemCount;
-    public int ItemCount { get { return _itemCount; } }
+    private float _hp;
+    public float HP { get { return _hp; } set { _hp = value; } }
 
     [SerializeField]
     private GameObject _itemPrefab;
     public GameObject ItemPrefab { get { return _itemPrefab; } }
-
-    [SerializeField]
-    private Sprite _itemImage;
-    public Sprite ItemImage { get { return _itemImage; } }
-
-    [SerializeField]
-    private int _itemCode;
-    public int ItemCode { get { return _itemCode; } }
-
-    [SerializeField]
-    private float _hp;
-    public float HP { get { return _hp; } }
 }

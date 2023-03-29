@@ -28,11 +28,9 @@ public class ZombieFSM_Idle : ZombieFSM_Base
         while (true)
         {
             float Ran = Random.Range(4f, 12f);
-            Debug.Log("<color=red>Wait</color>" + Ran);
             yield return new WaitForSeconds(Ran);
             float walkTime = Random.Range(8f, 14.5f);
             RandomWalk();
-            Debug.Log("<color=blue>Walk</color>" + walkTime);
             yield return new WaitForSeconds(walkTime);
             _zombieFSM.Anim.OnExitWanderWalk();
         }

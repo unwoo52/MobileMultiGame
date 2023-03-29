@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,6 @@ using UnityEngine.AI;
 public interface ICancelbuild
 {
     bool CancelBuildObject();
-}
-public interface ICreateBuilding
-{
-    void CreateBuildObject(BuidingItemData itemdata);
 }
 public interface ISetBuildObjectPos
 {
@@ -20,49 +17,52 @@ public interface ICompleteBuild
     void CompleteBuildObject();
 }
 
-public class CreateBuilding : MonoBehaviour, ICancelbuild, ICreateBuilding, ISetActive, ISetBuildObjectPos, ICompleteBuild
+public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, ICompleteBuild
 {
-    [SerializeField] GameObject buildObject;
+    GameObject buildObject;
     [SerializeField] Building building;
-    BuidingItemData _itemData;
     public bool CancelBuildObject()
     {
         Destroy(this);
         return true;
     }
-
+    public bool BuildProcess(out GameObject buildobject, BuidingItemData itemData)
+    {
+        GameObject gameObject;
+        buildobject = null;
+        if(!InstantiateBuilding(out gameObject, itemData)) return false;
+        buildobject = gameObject;
+        this.buildObject = gameObject;
+        return true;
+    }
     public void CompleteBuildObject()
     {
-        building._itemdata = _itemData;
         Destroy(this);
     }
 
-    public void CreateBuildObject(BuidingItemData itemData)
-    {
-        _itemData = itemData;
-        InstantiateBuilding();
-        
-    }
-
-    private void InstantiateBuilding()
-    {
-        buildObject = Instantiate(_itemData.ItemPrefab, transform);
-    }
-
-    
-
     public void SetBuildObjectPos(Vector3 vector3)
     {
-        Debug.Log(vector3);
         Renderer renderer = buildObject.GetComponent<Renderer>();
         float height = renderer.bounds.size.y;
         transform.position = new Vector3(vector3.x, vector3.y + height / 2f, vector3.z);
     }
 
-    public void SetObjectActive(bool b)
+    private bool InstantiateBuilding(out GameObject buildingObject, BuidingItemData buidingItemData)
     {
-        buildObject.SetActive(b);
+        buildingObject = null;
+        if (PhotonNetwork.IsConnected == false)
+        {
+            buildingObject = Instantiate(buidingItemData.ItemPrefab, this.transform);
+        }
+        else if (PhotonNetwork.IsMasterClient)
+        {
+            buildingObject = PhotonNetwork.Instantiate(buidingItemData.ItemPrefab.name, transform.position, Quaternion.identity, 0);
+            buildingObject.transform.parent = this.transform;
+        }
+
+        return true;
     }
+
 
     /*/*
     */

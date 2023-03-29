@@ -21,8 +21,8 @@ public class GameJoinManager : MonoBehaviour
 
     public void Connect(string gamename, string mapname)
     {
-        GameSaveManagement.Instance.mapname= mapname;
-        GameSaveManagement.Instance.gamename=gamename;
+        GameDataManager.Instance.mapname= mapname;
+        GameDataManager.Instance.gamename=gamename;
         SceneManager.LoadScene("LoadScene");
     }
 }

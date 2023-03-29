@@ -3752,6 +3752,20 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1915650993}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1004562886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004562885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e16eeb78563623a499be802acbb27cb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamename: 
+  mapname: 
 --- !u!1001 &1004657782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5811,7 +5825,6 @@ GameObject:
   - component: {fileID: 1419611499}
   - component: {fileID: 1419611498}
   - component: {fileID: 1419611497}
-  - component: {fileID: 1419611500}
   m_Layer: 5
   m_Name: Ceate Game Canvas
   m_TagString: Untagged
@@ -5907,18 +5920,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1419611500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1419611495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: beedf4758477858418088fd4e9220d2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1455958305
 GameObject:
   m_ObjectHideFlags: 0
@@ -8619,7 +8620,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameSaveManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 92094451227705055, guid: 58ed35b9074d449438c5f57487c4e183, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 58ed35b9074d449438c5f57487c4e183, type: 3}
 --- !u!1 &1918618878
 GameObject:

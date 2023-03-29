@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class BuildingItemUsingSyetem : ItemUsingSystem
 {
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private GameObject _prefabTempBuildObjectParent;
+    [SerializeField] private GameObject _buildParent;
     private GameObject buildObject;
 
 
@@ -62,7 +62,7 @@ public class BuildingItemUsingSyetem : ItemUsingSystem
         Transform InstallObjectParent = inGameManager.Instance.GetInstallObjectsParent();
 
         //건물 설치를 컨트롤하는 프레펩 오브젝트(스크립트만 있는 오브젝트)를 생성
-        buildObject = Instantiate(_prefabTempBuildObjectParent, InstallObjectParent);
+        buildObject = Instantiate(_buildParent, InstallObjectParent);
 
         //CreateBuildObject 기능은 위에 코드에서 만든 object의 스크립트에게 이관
             //설치할 건물 데이터 불러오기

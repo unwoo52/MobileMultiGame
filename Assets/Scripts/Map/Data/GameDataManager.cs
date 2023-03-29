@@ -13,10 +13,10 @@ public interface ILoadDataAtDirectory
 {
     List<T> LoadDataAtDirectory<T>(string datapath);
 }
-public class GameSaveManagement : MonoBehaviour, ISaveData, ILoadDataAtDirectory
+public class GameDataManager : MonoBehaviour, ISaveData, ILoadDataAtDirectory
 {
     #region singleton
-    private static GameSaveManagement _instance = null;
+    private static GameDataManager _instance = null;
 
     void Awake()
     {
@@ -29,7 +29,7 @@ public class GameSaveManagement : MonoBehaviour, ISaveData, ILoadDataAtDirectory
             Destroy(this.gameObject);
         }
     }
-    public static GameSaveManagement Instance
+    public static GameDataManager Instance
     {
         get
         {
