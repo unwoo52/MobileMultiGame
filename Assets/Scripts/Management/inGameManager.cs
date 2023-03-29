@@ -54,12 +54,15 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
     private bool MapDataLoad()
     {
         /*
-        if (!SaveManager.TryGetComponent(out ))
+        if (GameDataManager.TryGetComponent(out ILoadGameData loadGameData))
         {
-
-        } return false;
-
+            if (!loadGameData.LoadGameData()) return false;
+        } else return false;
         */
+        if (!GameDataManager.TryGetComponent(out IAllGameDataSave loadGameData)) return false;
+        if (!loadGameData.AllGameDataSave()) return false;
+        
+
         return true;
     }
     private void CreatePlayer()

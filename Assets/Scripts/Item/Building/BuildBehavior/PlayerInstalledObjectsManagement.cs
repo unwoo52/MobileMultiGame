@@ -18,8 +18,20 @@ public class BuildObjcetDataWrapper
 {
     public BuildObjectData[] objects;
 }
-public class PlayerInstalledObjectsManagement : MonoBehaviour
+public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData<BuildObjcetDataWrapper>, ISaveGameData
 {
+    #region interfaces
+    public bool SaveGameData(string gamename)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool LoadGameData(BuildObjcetDataWrapper data)
+    {
+        return LoadDataAndCreateBuilding(data);
+    }
+    #endregion
+
     [SerializeField] private GameObject _buildParent;
 
     [ContextMenu("!!!Save Building Objects")]
@@ -52,6 +64,7 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour
 
     private void SaveData<T>(T _wrapper)
     {
+        /*
         string json = JsonUtility.ToJson(_wrapper);
 
         Debug.Log(json);
@@ -60,73 +73,62 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour
         string filename = "BUILDING_DATA_" + DateTime.Now.Ticks.ToString() + ".json";
         string filepath = Application.dataPath + "/Saved/GameData/";
         CreateDirectoryIfNotExists(filepath);
-        File.WriteAllText(filepath + filename, json);
+        File.WriteAllText(filepath + filename, json);*/
     }
 
     
-    [ContextMenu("!!!Load Building Datas")]
-    private void LoadBuildingData()
-    {
-        // Saved/GameData 폴더에서 .json 파일을 모두 찾아서 읽어옵니다.
-        string[] filenames = Directory.GetFiles(Application.dataPath + "/Saved/GameData", "*.json");
-
-        foreach (string filename in filenames)
+    private bool LoadDataAndCreateBuilding(BuildObjcetDataWrapper buildObjcetDataWrapper)
+    {            
+        foreach (BuildObjectData buildObjectData in buildObjcetDataWrapper.objects)
         {
-            string str = File.ReadAllText(filename);
-
-            // 파일에서 읽어온 JSON 데이터를 BuildObjectData 리스트로 변환합니다.
-            BuildObjcetDataWrapper childObjects = JsonUtility.FromJson<BuildObjcetDataWrapper>(str);
-            
-            foreach (BuildObjectData buildObjectData in childObjects.objects)
-            {
-                LoadData(buildObjectData);
-            }
+            LoadBuilding(buildObjectData);
         }
+        return true;
     }
 
-    private bool LoadData(out string json, string filepath, string filename)
+    
+    private bool LoadBuilding(BuildObjectData buildingdata)
     {
-        json = null;
+        if(!CreateBuildPrefab(out GameObject createobject)) return false;
 
-        string path = Path.Combine(filepath, filename);
-        json = File.ReadAllText(path);
+        if (!SetBuildingState(createobject, buildingdata)) return false;
 
         return true;
     }
-    
-    private void LoadData(BuildObjectData data4)
+
+    private bool CreateBuildPrefab(out GameObject buildPrefab)
     {
-        GameObject createobject = null;
+        buildPrefab = null;
+        if (_buildParent == null) return false;
+
         if (PhotonNetwork.IsConnected == false)
         {
-            createobject = Instantiate(_buildParent, this.transform);
+            buildPrefab = Instantiate(_buildParent, this.transform);
         }
         else if (PhotonNetwork.IsMasterClient)
         {
-            createobject = PhotonNetwork.Instantiate(_buildParent.name, transform.position, Quaternion.identity, 0);
+            buildPrefab = PhotonNetwork.Instantiate(_buildParent.name, transform.position, Quaternion.identity, 0);
         }
+        else return false;
 
-        if (createobject != null)
-        {
-            createobject.transform.position = data4.position;
-            createobject.transform.rotation = data4.rotation;
-            if (createobject.TryGetComponent(out Building building))
-            {
-                if (building.TryGetComponent(out ISetBuildingItemData setBuildingItemData))
-                {
-                    setBuildingItemData.SetBuildingItemData(data4.itemcode, data4.hp);
-                }
-            }
+        if (buildPrefab == null) return false;
 
-        }
+        return true;
     }
 
-
-    private void CreateDirectoryIfNotExists(string directoryPath)
+    private bool SetBuildingState(GameObject createobject, BuildObjectData buildingdata)
     {
-        if (!Directory.Exists(directoryPath))
+        createobject.transform.position = buildingdata.position;
+        createobject.transform.rotation = buildingdata.rotation;
+        if (createobject.TryGetComponent(out Building building))
         {
-            Directory.CreateDirectory(directoryPath);
+            if (building.TryGetComponent(out ISetBuildingItemData setBuildingItemData))
+            {
+                setBuildingItemData.SetBuildingItemData(buildingdata.itemcode, buildingdata.hp);
+            }
         }
+
+        return true;
     }
+
 }

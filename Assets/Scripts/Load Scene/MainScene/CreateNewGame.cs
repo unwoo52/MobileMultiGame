@@ -43,13 +43,9 @@ public class CreateNewGame : MonoBehaviour
     private void LoadSaveGame()
     {
         List<MapData> list;
-        if (gameSaveManager.TryGetComponent(out ILoadDataAtDirectory loadDataAtDirectory))
-        {
-            list = loadDataAtDirectory.LoadDataAtDirectory<MapData>(_savegamePath);
-        }
-        else return;
+        list = DataSaveAndLoad.LoadBinaryFiles<MapData>(_savegamePath);
 
-        foreach(MapData mapdata in list)
+        foreach (MapData mapdata in list)
         {
             CreateGame(mapdata._gameName, mapdata._mapName);
         }
@@ -112,10 +108,7 @@ public class CreateNewGame : MonoBehaviour
     private void SaveCreatedGame()
     {
         string filename = $"{_mapdata._gameName}.bin";
-        if (gameSaveManager.TryGetComponent(out ISaveData saveData))
-        {
-            saveData.SaveData(_savegamePath, filename, _mapdata);
-        }
+        DataSaveAndLoad.SaveBinary(_savegamePath, filename, _mapdata);
     }
     public void CancelCreateGame()
     {

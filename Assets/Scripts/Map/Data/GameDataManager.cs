@@ -1,19 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using UnityEngine;
 
-public interface ISaveData
+public interface IAllGameDataSave
 {
-    void SaveData<T>(string filePath, string filename, T data);
+    bool AllGameDataSave();
 }
-public interface ILoadDataAtDirectory
+public interface IAllGameDataLoad
 {
-    List<T> LoadDataAtDirectory<T>(string datapath);
+    bool AllGameDataLoad();
 }
-public class GameDataManager : MonoBehaviour, ISaveData, ILoadDataAtDirectory
+public interface ILoadGameData<T> where T : class
+{
+    bool LoadGameData(T data);
+}
+public interface ISaveGameData
+{
+    bool SaveGameData(string gamename);
+}
+
+
+[System.Serializable]
+public class TotalDataWrapper
+{
+    public BuildObjcetDataWrapper _buildObjcetDataWrapper;
+    //playerData...
+    //EnemyDataWrapper...
+    //timeDataWrapper...
+}
+
+public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 {
     #region singleton
     private static GameDataManager _instance = null;
@@ -42,7 +56,6 @@ public class GameDataManager : MonoBehaviour, ISaveData, ILoadDataAtDirectory
     }
     #endregion
 
-    private BinaryFormatter binaryFormatter = new();
     public string gamename, mapname;
 
     private void Start()
@@ -50,95 +63,46 @@ public class GameDataManager : MonoBehaviour, ISaveData, ILoadDataAtDirectory
         DontDestroyOnLoad(gameObject);
     }
 
-    #region interface
-    public List<T> LoadDataAtDirectory<T>(string datapath)
-    {
-        return LoadBinaryFiles<T>(datapath);
-    }
-    public void SaveData<T>(string filePath, string filename, T data)
-    {
-        SaveBinary(filePath, filename, data);
-    }
 
-    #endregion
-
-    #region private codes
-    private bool ToJsonUtillity<T>(out string str, T data)
+    public bool AllGameDataLoad()
     {
-        str = JsonUtility.ToJson(data);
+        //load Total AlldataWrapper
+        //AlldataWrapper.BuildWrapper
+
+
+        //get parents from InGameManaer...
+
+
+
+        //GameObject _playerInstalledObjectsManagement = inGameManager.Instance.PlayerInstalledObjectsManagement;
+        //_playerInstalledObjectsManagement.getcomponent(interface LoadData);
+
+        string data;
+
+        DataSaveAndLoad.LoadFileData(out data, Application.dataPath + "/Saved/GameData/", gamename);
+
+        if (!DataSaveAndLoad.LoadJson(out TotalDataWrapper json, data)) return false;
+        //PlayerInstalledObjectsManagement.loadData(json._buildObjcetDataWrapper);
+
+
+        //인터페이스로 각 parents에게서 bool LoadMethod(gamename) 실행
         return true;
     }
 
-    private void SaveBinary<T>(string filePath, string filename, T data)
+
+    public bool AllGameDataSave()
     {
-        string directoryPath = filePath;
-        string combinedFilePath = Path.Combine(directoryPath, filename);
+        //get parents from InGameManaer...
 
-        CreateDirectoryIfNotExists(directoryPath);
-        using (FileStream fileStream = File.Create(combinedFilePath))
-        {
-            binaryFormatter.Serialize(fileStream, data);
-            fileStream.Close();
-        }
+        //인터페이스로 각 parents에게서 Save 실행
+
+        //각 parent에서 각자의 데이터 형태가 return
+
+        //모인 데이터들을 취합
+        TotalDataWrapper totalDataWrapper;
+
+        //save totalDataWrapper을 json으로
+
+        return true;
     }
-
-
-    private T LoadBinary<T>(string filePath)
-    {
-        T data = default;
-        if (File.Exists(filePath))
-        {
-            using (FileStream fileStream = File.Open(filePath, FileMode.Open))
-            {
-                data = (T)binaryFormatter.Deserialize(fileStream);
-                fileStream.Close();
-            }
-        }
-        else
-        {
-            Debug.LogError(filePath + "파일이 존재하지 않습니다.");
-        }
-        return data;
-    }
-
-    private List<T> LoadBinaryFiles<T>(string directoryPath)
-    {
-        List<T> dataList = new List<T>();
-        if (Directory.Exists(directoryPath))
-        {
-            foreach (string filePath in Directory.GetFiles(directoryPath))
-            {
-                if (Path.GetExtension(filePath) == ".bin")
-                {
-                    try
-                    {
-                        using (FileStream fileStream = File.Open(filePath, FileMode.Open))
-                        {
-                            T data = (T)binaryFormatter.Deserialize(fileStream);
-                            dataList.Add(data);
-                            fileStream.Close();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogErrorFormat("Error while loading file {0}: {1}", filePath, ex.Message);
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError(directoryPath + "디렉토리가 존재하지 않습니다.");
-        }
-        return dataList;
-    }
-
-    private void CreateDirectoryIfNotExists(string directoryPath)
-    {
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-    }
-    #endregion
 }
