@@ -105,12 +105,9 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
     /// <summary> 오브젝트가 갖고 있는 ILoadGameData인터페이스에 data를 로드하게 합니다. </summary>
     private bool LoadDataAtObject<T>(GameObject parentobject, T data) where T : class
     {
-        bool temp = true;
+        if (!parentobject.TryGetComponent(out ILoadGameData<T> loadGameData)) return false;
 
-        if (!parentobject.TryGetComponent(out ILoadGameData<T> loadGameData)) temp = false;
-        loadGameData.LoadGameData(data);
-
-        return temp;
+        return loadGameData.LoadGameData(data);
     }
 
     /// <summary>

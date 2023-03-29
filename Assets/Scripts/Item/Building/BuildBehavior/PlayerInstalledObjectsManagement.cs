@@ -85,7 +85,7 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData<Bui
     {
         if(!CreateBuildPrefab(out GameObject createobject)) return false;
 
-        if (!SetBuildingState(createobject, buildingdata)) return false;
+        if (!InitializeBuilding(createobject, buildingdata)) return false;
 
         return true;
     }
@@ -110,7 +110,7 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData<Bui
         return true;
     }
 
-    private bool SetBuildingState(GameObject createobject, BuildObjectData buildingdata)
+    private bool InitializeBuilding(GameObject createobject, BuildObjectData buildingdata)
     {
         createobject.transform.position = buildingdata.position;
         createobject.transform.rotation = buildingdata.rotation;
