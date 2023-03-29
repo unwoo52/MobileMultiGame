@@ -79,7 +79,6 @@ public class DayNightCycle : MonoBehaviour
         while (true)
         {
             float timeOfDay = GetTimeofDay(cycleDuration);
-            Debug.Log(GetCurrentTimePeriod().name + timeOfDay);
             yield return new WaitForSeconds(1);
         }
     }

@@ -59,7 +59,7 @@ public class BuildingItemUsingSyetem : ItemUsingSystem
     {
 
         //설치되는 오브젝트들을 모아두는 InstallObjectsParent을 호출해 parent로 지정
-        Transform InstallObjectParent = inGameManager.Instance.GetInstallObjectsParent();
+        Transform InstallObjectParent = InGameManager.Instance.PlayerInstalledObjectsParent.transform;
 
         //건물 설치를 컨트롤하는 프레펩 오브젝트(스크립트만 있는 오브젝트)를 생성
         buildObject = Instantiate(_buildParent, InstallObjectParent);

@@ -13,10 +13,9 @@ public static class DataSaveAndLoad
     #region binary methods
     public static void SaveBinary<T>(string filePath, string filename, T data)
     {
-        string directoryPath = filePath;
-        string combinedFilePath = Path.Combine(directoryPath, filename);
+        string combinedFilePath = Path.Combine(filePath, filename);
 
-        CreateDirectoryIfNotExists(directoryPath);
+        CreateDirectoryIfNotExists(filePath);
         using (FileStream fileStream = File.Create(combinedFilePath))
         {
             binaryFormatter.Serialize(fileStream, data);
@@ -88,29 +87,38 @@ public static class DataSaveAndLoad
         return true;
     }
 
-    public static bool LoadFileData(out string data ,string filepath, string filename)
+    public static bool LoadToJson<T>(out T t ,string filepath, string filename)
     {
-        string path = Path.Combine(filepath, filename);
+        string path = Path.Combine(filepath, $"{filename}.json");
+
         if (!File.Exists(path))
         {
-            data = null;
+            t = default(T);
             return false;
         }
 
-        data = File.ReadAllText(path);
+        string str = File.ReadAllText(path);
+        t = JsonUtility.FromJson<T>(str);
         return true;
     }
-
-    public static bool LoadJson<T>(out T t, string json)
+    public static bool SaveToJson<T>(T data, string filepath, string filename)
     {
+        string str = JsonUtility.ToJson(data);
         try
         {
-            t = JsonUtility.FromJson<T>(json);
+            CreateDirectoryIfNotExists(filepath);
+
+            if (filename.EndsWith(".json"))
+            {
+                filename = filename.Substring(0, filename.Length - 5);
+            }
+            File.WriteAllText(Path.Combine(filepath, $"{filename}.json"), str);
         }
         catch
         {
-            t = default(T); return false; 
+            return false;
         }
+
         return true;
     }
     #endregion

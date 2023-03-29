@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public interface IGetInstallObjectsParent
-{
-    Transform GetInstallObjectsParent();
-}
-public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
+public class InGameManager : MonoBehaviourPunCallbacks
 {
     #region singleton
-    private static inGameManager _instance = null;
+    private static InGameManager _instance = null;
 
     void Awake()
     {
@@ -24,7 +20,7 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
             Destroy(this.gameObject);
         }
     }
-    public static inGameManager Instance
+    public static InGameManager Instance
     {
         get
         {
@@ -36,32 +32,26 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
         }
     }
     #endregion
-    [SerializeField] private GameObject PlayerInstalledObjectsParent;
+    [SerializeField] private GameObject _playerInstalledObjectsParent;
+    public GameObject PlayerInstalledObjectsParent => _playerInstalledObjectsParent;
     [SerializeField] private GameObject EnemyInstalledParent;
 
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerSpawner;
 
-    [SerializeField] private GameObject GameDataManager;
+    [SerializeField] private GameObject _gameDataManager;
 
     private void Start()
     {
-        GameDataManager = global::GameDataManager.Instance.gameObject;
+        _gameDataManager = GameDataManager.Instance.gameObject;
         CreatePlayer();
-        MapDataLoad();
+        //MapDataLoad();
     }
 
     private bool MapDataLoad()
     {
-        /*
-        if (GameDataManager.TryGetComponent(out ILoadGameData loadGameData))
-        {
-            if (!loadGameData.LoadGameData()) return false;
-        } else return false;
-        */
-        if (!GameDataManager.TryGetComponent(out IAllGameDataSave loadGameData)) return false;
-        if (!loadGameData.AllGameDataSave()) return false;
-        
+        if (!_gameDataManager.TryGetComponent(out IAllGameDataSave loadGameData)) return false;
+        if (!loadGameData.AllGameDataSave()) return false;        
 
         return true;
     }
@@ -93,10 +83,6 @@ public class inGameManager : MonoBehaviourPunCallbacks, IGetInstallObjectsParent
         //instante building save
     }
 
-    public Transform GetInstallObjectsParent()
-    {
-        return PlayerInstalledObjectsParent.transform;
-    }
     public Transform GetEnemyInstalledParent()
     {
         return EnemyInstalledParent.transform;

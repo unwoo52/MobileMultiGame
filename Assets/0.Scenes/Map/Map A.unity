@@ -39842,12 +39842,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976ad130ab9d19640ac82fdaa320bc9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerInstalledObjectsParent: {fileID: 1629825307}
+  _playerInstalledObjectsParent: {fileID: 1629825307}
   EnemyInstalledParent: {fileID: 5796929345402311901}
   playerPrefab: {fileID: 5670689508795396042, guid: b2459a0b9538bba45bbb9b38bc0b44ee,
     type: 3}
   playerSpawner: {fileID: 1165055053}
-  SaveManager: {fileID: 0}
+  _gameDataManager: {fileID: 0}
 --- !u!1001 &1555211902
 PrefabInstance:
   m_ObjectHideFlags: 0
