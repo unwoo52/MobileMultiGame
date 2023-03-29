@@ -45,13 +45,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         _gameDataManager = GameDataManager.Instance.gameObject;
         CreatePlayer();
-        //MapDataLoad();
+        MapDataLoad();
     }
 
     private bool MapDataLoad()
     {
-        if (!_gameDataManager.TryGetComponent(out IAllGameDataSave loadGameData)) return false;
-        if (!loadGameData.AllGameDataSave()) return false;        
+        if (!_gameDataManager.TryGetComponent(out IAllGameDataLoad loadGameData)) return false;
+        long flag = loadGameData.AllGameDataLoad();
+        if (flag == -1) Debug.Log("No data to load as this is the first time the game is being created.");
 
         return true;
     }

@@ -7,7 +7,7 @@ public interface IAllGameDataSave
 }
 public interface IAllGameDataLoad
 {
-    bool AllGameDataLoad();
+    long AllGameDataLoad();
 }
 public interface ILoadGameData<T> where T : class
 {
@@ -66,18 +66,24 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 
 
     [ContextMenu("!!!Load")]
-    public bool AllGameDataLoad()
+    public long AllGameDataLoad()
     {
-        bool temp = true;
+        long dataLoadFlag = 0L;
 
         //load Total totalWrapper
         TotalDataWrapper totalDataWrapper = new();
-        DataSaveAndLoad.LoadToJson(out totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename); // 여기서 false가 발생되면, 원인은 무조건 '게임을 처음 시작해서' 하나 뿐
+        if (!DataSaveAndLoad.LoadToJson(out totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename))
+        {
+            dataLoadFlag = -1;
+            return dataLoadFlag;
+        }
+              // 여기서 false가 발생되면, 원인은 무조건 '게임을 처음 시작해서' 하나 뿐
         //추가로, 게임이 생성되자마자 디렉토리와 세이브파일을 바로 한번은 생성하게 만들기.
 
-        //get parents from InGameManaer...
-        //인터페이스로 각 parents에게서 bool LoadMethod(gamename) 실행
-        LoadDataAtObject(InGameManager.Instance.PlayerInstalledObjectsParent, totalDataWrapper._buildObjcetDataWrapper);
+            //get parents from InGameManaer...
+            //인터페이스로 각 parents에게서 bool LoadMethod(gamename) 실행
+
+        if (!LoadDataAtObject(InGameManager.Instance.PlayerInstalledObjectsParent, totalDataWrapper._buildObjcetDataWrapper)) SetFlag(ref dataLoadFlag, 1, false);
         //플레이어 데이터 로드...
         //적 데이터 로드...
         //아이템 데이터 로드...
@@ -86,7 +92,7 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
         //나중에 HRESULT처럼 1비트짜리 구조체로 구현하기
 
 
-        return temp;
+        return dataLoadFlag;
     }
 
     /// <summary> 오브젝트가 갖고 있는 ILoadGameData인터페이스에 data를 로드하게 합니다. </summary>
@@ -121,5 +127,18 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
         DataSaveAndLoad.SaveToJson(totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename);
 
         return temp;
+    }
+
+    /*codes*/
+    private void SetFlag(ref long flag, int bitIndex, bool value)
+    {
+        if (value)
+        {
+            flag |= (1L << bitIndex);  // 비트를 1로 설정
+        }
+        else
+        {
+            flag &= ~(1L << bitIndex); // 비트를 0으로 설정
+        }
     }
 }
