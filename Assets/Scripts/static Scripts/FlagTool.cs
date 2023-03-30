@@ -5,14 +5,18 @@ using UnityEngine;
 
 public static class FlagTool
 {
-    public static bool PrintFailedData<T, U>(T t, U flag)
+    /// <summary>
+    /// dictionary와 flag를 받아서, flag 내에 활성화된 비트에 대응되는 dictionary value값들을 디버그 로그로 출력합니다.
+    /// </summary>
+    /// 
+    public static bool PrintFailedData<T, U>(T dictionary, U flag)
     where T : IDictionary<string, byte>
     where U : struct, IConvertible
     {
         List<string> failedData = new List<string>();
 
         // 플래그를 비트 연산하여 실패한 데이터를 리스트에 추가합니다.
-        foreach (var pair in t)
+        foreach (var pair in dictionary)
         {
             if ((flag.ToInt64(null) & (1L << pair.Value)) != 0)
                 failedData.Add(pair.Key);
@@ -29,63 +33,51 @@ public static class FlagTool
         else return true;
     }
 
-    public static bool SetFlag(ref byte flag, string Indexname, bool value)
+    public static bool SetBit(ref byte flag, int bitIndex)
     {
-        if (!LoadData.loadDataFlag.TryGetValue(Indexname, out byte bitIndex))
+        if (bitIndex < 0 || bitIndex >= 8 * sizeof(byte))
         {
-            Debug.LogError($"{Indexname} 데이터에 대한 플래그 비트를 찾을 수 없습니다.");
+            Debug.LogError($"잘못된 비트 인덱스입니다: {bitIndex}");
             return false;
         }
 
-        if (value)
-        {
-            flag |= (byte)(1 << bitIndex); // 비트를 1로 설정
-        }
-        else
-        {
-            flag &= (byte)~(1 << bitIndex); // 비트를 0으로 설정
-        }
-
+        flag |= (byte)(1 << bitIndex);
         return true;
     }
 
-    public static bool SetFlag(ref ushort flag, string Indexname, bool value)
+    public static bool SetBit(ref short flag, int bitIndex)
     {
-        if (!LoadData.loadDataFlag.TryGetValue(Indexname, out byte bitIndex))
+        if (bitIndex < 0 || bitIndex >= 8 * sizeof(short))
         {
-            Debug.LogError($"{Indexname} 데이터에 대한 플래그 비트를 찾을 수 없습니다.");
+            Debug.LogError($"잘못된 비트 인덱스입니다: {bitIndex}");
             return false;
         }
 
-        if (value)
-        {
-            flag |= (ushort)(1 << bitIndex); // 비트를 1로 설정
-        }
-        else
-        {
-            flag &= (ushort)~(1 << bitIndex); // 비트를 0으로 설정
-        }
-
+        flag |= (short)(1 << bitIndex);
         return true;
     }
 
-    public static bool SetFlag(ref uint flag, string Indexname, bool value)
+    public static bool SetBit(ref int flag, int bitIndex)
     {
-        if (!LoadData.loadDataFlag.TryGetValue(Indexname, out byte bitIndex))
+        if (bitIndex < 0 || bitIndex >= 8 * sizeof(int))
         {
-            Debug.LogError($"{Indexname} 데이터에 대한 플래그 비트를 찾을 수 없습니다.");
+            Debug.LogError($"잘못된 비트 인덱스입니다: {bitIndex}");
             return false;
         }
 
-        if (value)
+        flag |= (1 << bitIndex);
+        return true;
+    }
+
+    public static bool SetBit(ref long flag, int bitIndex)
+    {
+        if (bitIndex < 0 || bitIndex >= 8 * sizeof(long))
         {
-            flag |= (uint)(1 << bitIndex); // 비트를 1로 설정
-        }
-        else
-        {
-            flag &= (uint)~(1 << bitIndex); // 비트를 0으로 설정
+            Debug.LogError($"잘못된 비트 인덱스입니다: {bitIndex}");
+            return false;
         }
 
+        flag |= (1L << bitIndex);
         return true;
     }
 }

@@ -18,19 +18,6 @@ public interface ISaveGameData<T> where T : class
 {
     bool SaveGameData(out T data);
 }
-public class LoadData
-{
-    public static Dictionary<string, byte> loadDataFlag = new Dictionary<string, byte>()
-    {
-        {"buildObject Data", 1},
-        {"enemy Data", 2},
-        {"player Data", 3},
-        {"time Data", 4},
-        {"none1", 5},
-        {"none2", 6},
-        {"none3", 7}
-    };
-}
 
 [System.Serializable]
 public class TotalDataWrapper
@@ -72,6 +59,17 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 
     public string gamename, mapname;
 
+    private Dictionary<string, byte> loadDataFlag = new Dictionary<string, byte>()
+    {
+        {"buildObject Data", 1},
+        {"enemy Data", 2},
+        {"player Data", 3},
+        {"time Data", 4},
+        {"none1", 5},
+        {"none2", 6},
+        {"none3", 7}
+    };
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -94,14 +92,17 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 
             //각각의 데이터 로드 실행
         //건물 데이터 로드...
-        if (!LoadDataAtObject(InGameManager.Instance.PlayerInstalledObjectsParent, totalDataWrapper._buildObjcetDataWrapper)) 
-            FlagTool.SetFlag(ref flag, "buildObject", false);
+        if (!LoadDataAtObject(InGameManager.Instance.PlayerInstalledObjectsParent, totalDataWrapper._buildObjcetDataWrapper))
+        {
+            //FlagTool.SetFlag(ref flag, "buildObject", false);
+
+        }
         //플레이어 데이터 로드...
         //적 데이터 로드...
         //아이템 데이터 로드...
 
 
-        PrintFailedData(LoadData.loadDataFlag, flag);
+        FlagTool.PrintFailedData(loadDataFlag, flag);
         return flag;
     }
 
@@ -112,33 +113,6 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 
         return loadGameData.LoadGameData(data);
     }
-
-    /// <summary>
-    /// flag 비트와 대응되는 딕셔너리와 flag비트를 받고, false 비트가 활성화 되어있다면 오류 로그를 출력하고 false를 반환합니다.
-    /// 그렇지 않고, 모든 flag가 true이면 로그를 출력하지 않고 true를 리턴합니다.
-    /// </summary>
-    private bool PrintFailedData<T>(T t, long flag) where T : IDictionary<string, byte>
-    {
-        List<string> failedData = new List<string>();
-
-        // 플래그를 비트 연산하여 실패한 데이터를 리스트에 추가합니다.
-        foreach (var pair in t)
-        {
-            if ((flag & (1L << pair.Value)) != 0)
-                failedData.Add(pair.Key);
-        }
-
-        // 실패한 데이터 이름을 이용하여 로그를 출력합니다.
-        if (failedData.Count > 0)
-        {
-            string dataNames = string.Join(", ", failedData.ToArray());
-            string message = $"{dataNames} 데이터의 로드에 실패했습니다.";
-            Debug.LogError(message);
-            return false;
-        }
-        else return true;
-    }
-
 
     [ContextMenu("!!!Save")]
     public bool AllGameDataSave()
@@ -160,26 +134,5 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
         DataSaveAndLoad.SaveToJson(totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename);
 
         return temp;
-    }
-
-    /*codes*/
-    private bool SetFlag(ref byte flag, string Indexname, bool value)
-    {
-        if (!LoadData.loadDataFlag.TryGetValue(name, out byte bitIndex))
-        {
-            Debug.LogError($"{name} 데이터에 대한 플래그 비트를 찾을 수 없습니다.");
-            return false;
-        }
-
-        if (value)
-        {
-            flag |= (byte)(1 << bitIndex);  // 비트를 1로 설정
-        }
-        else
-        {
-            flag &= (byte)~(1 << bitIndex); // 비트를 0으로 설정
-        }
-
-        return true;
     }
 }
