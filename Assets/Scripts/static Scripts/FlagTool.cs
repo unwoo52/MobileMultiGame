@@ -26,14 +26,13 @@ public static class FlagTool
         if (failedData.Count > 0)
         {
             string dataNames = string.Join(", ", failedData.ToArray());
-            string message = $"{dataNames} 데이터의 로드에 실패했습니다.";
+            string message = $"Failed to load data for these data: {dataNames}.";
             Debug.LogError(message);
             return false;
         }
         else return true;
     }
-
-    public static bool SetBit(ref byte flag, int bitIndex)
+    public static bool SetBit(ref byte flag, int bitIndex, bool value)
     {
         if (bitIndex < 0 || bitIndex >= 8 * sizeof(byte))
         {
@@ -41,11 +40,14 @@ public static class FlagTool
             return false;
         }
 
-        flag |= (byte)(1 << bitIndex);
+        if (value)
+            flag |= (byte)(1 << bitIndex);
+        else
+            flag &= (byte)~(1 << bitIndex);
+
         return true;
     }
-
-    public static bool SetBit(ref short flag, int bitIndex)
+    public static bool SetBit(ref short flag, int bitIndex, bool value)
     {
         if (bitIndex < 0 || bitIndex >= 8 * sizeof(short))
         {
@@ -53,11 +55,15 @@ public static class FlagTool
             return false;
         }
 
-        flag |= (short)(1 << bitIndex);
+        if (value)
+            flag |= (short)(1 << bitIndex);
+        else
+            flag &= (short)~(1 << bitIndex);
+
         return true;
     }
 
-    public static bool SetBit(ref int flag, int bitIndex)
+    public static bool SetBit(ref int flag, int bitIndex, bool value)
     {
         if (bitIndex < 0 || bitIndex >= 8 * sizeof(int))
         {
@@ -65,11 +71,15 @@ public static class FlagTool
             return false;
         }
 
-        flag |= (1 << bitIndex);
+        if (value)
+            flag |= (1 << bitIndex);
+        else
+            flag &= ~(1 << bitIndex);
+
         return true;
     }
 
-    public static bool SetBit(ref long flag, int bitIndex)
+    public static bool SetBit(ref long flag, int bitIndex, bool value)
     {
         if (bitIndex < 0 || bitIndex >= 8 * sizeof(long))
         {
@@ -77,7 +87,11 @@ public static class FlagTool
             return false;
         }
 
-        flag |= (1L << bitIndex);
+        if (value)
+            flag |= (1L << bitIndex);
+        else
+            flag &= ~(1L << bitIndex);
+
         return true;
     }
 }

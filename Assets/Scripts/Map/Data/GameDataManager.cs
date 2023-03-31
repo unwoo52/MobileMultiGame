@@ -10,22 +10,13 @@ public interface IAllGameDataLoad
 {
     long AllGameDataLoad();
 }
-public interface ILoadGameData<T> where T : class
+public interface ILoadGameData
 {
-    bool LoadGameData(T data);
+    bool LoadGameData(List<object> datalist);
 }
 public interface ISaveGameData<T> where T : class
 {
     bool SaveGameData(out T data);
-}
-
-[System.Serializable]
-public class TotalDataWrapper
-{
-    public BuildObjcetDataWrapper _buildObjcetDataWrapper;
-    //playerData...
-    //EnemyDataWrapper...
-    //timeDataWrapper...
 }
 
 public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
@@ -58,66 +49,58 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
     #endregion
 
     public string gamename, mapname;
-
-    private Dictionary<string, byte> loadDataFlag = new Dictionary<string, byte>()
-    {
-        {"buildObject Data", 1},
-        {"enemy Data", 2},
-        {"player Data", 3},
-        {"time Data", 4},
-        {"none1", 5},
-        {"none2", 6},
-        {"none3", 7}
-    };
+    [SerializeField] private List<GameObject> GameObjectListForDataLoading;
 
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
     }
-
-
-    [ContextMenu("!!!Load")]
+    /// <summary>
+    /// 게임의 데이터를 로드합니다. 반환하는 flag가 0이면 모든 데이터의 정상 로드, 1이면 새로 생성한 게임이여서 로드할 데이터가 없다는 뜻,
+    /// 이 외의 비트는 각각 실패한 데이터를 의미합니다. 
+    /// </summary>
     public long AllGameDataLoad()
     {
-        byte flag = 0;
-
-        //load Total totalWrapper
-        TotalDataWrapper totalDataWrapper = new();
-
-        if (!DataSaveAndLoad.LoadToJson(ref totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename))
+        Dictionary<string, byte> loadDataFlag = new Dictionary<string, byte>()
         {
-            flag = 0x1;
-            return flag;
+            {"Player Installed Objects Parent", 2},
+            {"enemy Data", 3},
+            {"player Data", 4},
+            {"time Data", 5},
+            {"none1", 6},
+            {"none2", 7}
+        };
+        byte failFlag = 0;
+        List<object> data = new();
+
+        //data load
+        if (!DataSaveAndLoad.LoadToJson(ref data, Application.dataPath + "/Saved/GameData", gamename))
+        {
+            Debug.Log("No data to load as this is the first time the game is being created.");
+            failFlag = 0x1;
+            return failFlag;
         }
 
             //각각의 데이터 로드 실행
         //건물 데이터 로드...
-        if (!LoadDataAtObject(InGameManager.Instance.PlayerInstalledObjectsParent, totalDataWrapper._buildObjcetDataWrapper))
+        foreach(GameObject obj in GameObjectListForDataLoading)
         {
-            //FlagTool.SetFlag(ref flag, "buildObject", false);
-
+            if (!LoadDataAtObject(obj, data))
+                Debug.LogError($"Failed to load data for {obj.name}.");
         }
+
         //플레이어 데이터 로드...
         //적 데이터 로드...
         //아이템 데이터 로드...
 
 
-        FlagTool.PrintFailedData(loadDataFlag, flag);
-        return flag;
+        FlagTool.PrintFailedData(loadDataFlag, failFlag);
+        return failFlag;
     }
 
-    /// <summary> 오브젝트가 갖고 있는 ILoadGameData인터페이스에 data를 로드하게 합니다. </summary>
-    private bool LoadDataAtObject<T>(GameObject parentobject, T data) where T : class
-    {
-        if (!parentobject.TryGetComponent(out ILoadGameData<T> loadGameData)) return false;
-
-        return loadGameData.LoadGameData(data);
-    }
-
-    [ContextMenu("!!!Save")]
     public bool AllGameDataSave()
     {
-        bool temp = true;
+        bool temp = true;/*
         //TotalData 인스턴스 생성
         TotalDataWrapper totalDataWrapper = new();
         totalDataWrapper._buildObjcetDataWrapper = new();
@@ -132,7 +115,20 @@ public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
 
         //모인 데이터들을 취합이 끝난 뒤, 세이브
         DataSaveAndLoad.SaveToJson(totalDataWrapper, Application.dataPath + "/Saved/GameData", gamename);
-
+        */
         return temp;
+    }
+
+    /*codes*/
+
+    /// <summary>
+    /// 오브젝트의 ILoadGameData 인터페이스에 data를 전달합니다.
+    /// 오브젝트에 인터페이스가 없거나, 실행된 인터페이스 함수가 fail를 리턴하면 fail을 리턴합니다.
+    /// </summary>
+    private bool LoadDataAtObject(GameObject parentobject, List<object> data)
+    {
+        if (!parentobject.TryGetComponent(out ILoadGameData loadGameData)) return false;
+
+        return loadGameData.LoadGameData(data);
     }
 }

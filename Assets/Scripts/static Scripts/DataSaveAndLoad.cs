@@ -90,18 +90,20 @@ public static class DataSaveAndLoad
         return true;
     }
 
-    public static bool LoadToJson<T>(ref T t ,string filepath, string filename)
+    public static bool LoadToJson<T>(ref T data ,string filepath, string filename)
     {
         string path = Path.Combine(filepath, $"{filename}.json");
 
         if (!File.Exists(path))
         {
-            t = default(T);
+            data = default;
             return false;
         }
 
         string str = File.ReadAllText(path);
-        t = JsonUtility.FromJson<T>(str);
+
+        data = JsonUtility.FromJson<T>(str);
+
         return true;
     }
     public static bool SaveToJson<T>(T data, string filepath, string filename)

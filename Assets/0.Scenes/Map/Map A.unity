@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17023727, g: 0.20263496, b: 0.23855464, a: 1}
+  m_IndirectSpecularColor: {r: 0.17023703, g: 0.2026346, b: 0.23855408, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -39843,7 +39843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInstalledObjectsParent: {fileID: 1629825307}
-  EnemyInstalledParent: {fileID: 5796929345402311901}
+  _enemyInstalledParent: {fileID: 5796929345402311901}
   playerPrefab: {fileID: 5670689508795396042, guid: b2459a0b9538bba45bbb9b38bc0b44ee,
     type: 3}
   playerSpawner: {fileID: 1165055053}

@@ -16,7 +16,7 @@ public class BuildObjcetDataWrapper
 {
     public BuildObjectData[] objects;
 }
-public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData<BuildObjcetDataWrapper>, ISaveGameData<BuildObjcetDataWrapper>
+public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData, ISaveGameData<BuildObjcetDataWrapper>
 {
     [SerializeField] private GameObject _buildParent;
 
@@ -26,8 +26,17 @@ public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData<Bui
     {
         return SaveBuildings(out data);
     }
-    public bool LoadGameData(BuildObjcetDataWrapper data)
+    public bool LoadGameData(List<object> datalist)
     {
+        BuildObjcetDataWrapper data = null;
+
+        foreach(object obj in datalist)
+        {
+            if(obj is BuildObjcetDataWrapper) data = obj as BuildObjcetDataWrapper;
+        }
+
+        if (data == null) return false;
+
         return LoadBuildings(data);
     }
     #endregion
