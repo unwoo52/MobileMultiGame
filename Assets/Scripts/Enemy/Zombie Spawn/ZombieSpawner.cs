@@ -3,20 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieSpawner : MonoBehaviourPunCallbacks, IGetZombieSpawner
+namespace MyNamespace
 {
-    
-    public void GetZombieSpawner()
+    public class ZombieSpawner : MonoBehaviourPunCallbacks, IGetZombieSpawner
     {
-        GameObject prefab = Resources.Load<GameObject>("Warzombie F Pedroso");
-        if(PhotonNetwork.IsConnected == false)
+
+        public void GetZombieSpawner()
         {
-            Instantiate(prefab, transform.position, Quaternion.identity);
-            return;
-        }
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.Instantiate(prefab.name, transform.position, Quaternion.identity, 0);
+            GameObject prefab = Resources.Load<GameObject>("Warzombie F Pedroso");
+            if (PhotonNetwork.IsConnected == false)
+            {
+                Instantiate(prefab, transform.position, Quaternion.identity);
+                return;
+            }
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.Instantiate(prefab.name, transform.position, Quaternion.identity, 0);
+            }
         }
     }
 }
+

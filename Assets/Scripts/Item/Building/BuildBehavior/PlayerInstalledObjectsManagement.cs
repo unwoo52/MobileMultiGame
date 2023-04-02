@@ -2,136 +2,139 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class BuildObjectData
+
+namespace MyNamespace
 {
-    public Vector3 position;
-    public Quaternion rotation;
-    public string name;
-    public float hp;
-    public int itemcode;
-}
-[System.Serializable]
-public class BuildObjcetDataWrapper
-{
-    public BuildObjectData[] objects;
-}
-public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData, ISaveGameData<BuildObjcetDataWrapper>
-{
-    [SerializeField] private GameObject _buildParent;
-
-    #region interfaces
-
-    public bool SaveGameData(out BuildObjcetDataWrapper data)
+    [System.Serializable]
+    public class BuildObjectData
     {
-        return SaveBuildings(out data);
+        public Vector3 position;
+        public Quaternion rotation;
+        public string name;
+        public float hp;
+        public int itemcode;
     }
-    public bool LoadGameData(List<object> datalist)
+    [System.Serializable]
+    public class BuildObjcetDataWrapper
     {
-        BuildObjcetDataWrapper data = null;
+        public BuildObjectData[] _buildObjectDataWrapper;
+    }
+    public class PlayerInstalledObjectsManagement : MonoBehaviour, ILoadGameData, ISaveGameData
+    {
+        [SerializeField] private GameObject _buildParent;
 
-        foreach(object obj in datalist)
+        #region interfaces
+
+        public bool SaveGameData(out string data)
         {
-            if(obj is BuildObjcetDataWrapper) data = obj as BuildObjcetDataWrapper;
+            bool temp = SaveBuildings(out BuildObjcetDataWrapper buildingdata);
+            data = JsonUtility.ToJson(buildingdata);
+            return temp;
         }
 
-        if (data == null) return false;
-
-        return LoadBuildings(data);
-    }
-    #endregion
-
-
-    private bool SaveBuildings(out BuildObjcetDataWrapper buildObjcetDataWrapper)
-    {
-        List<BuildObjectData> buildObjectDataList = new List<BuildObjectData>();
-        BuildObjcetDataWrapper _wrapper = new();
-
-        for (int i = 0; i < transform.childCount; i++)
+        public bool LoadGameData(string data)
         {
-            BuildObjectData buildObjectData = new();
-            GetBuildingData(ref buildObjectData, i);
+            BuildObjcetDataWrapper buildObjcetDataWrapper = JsonUtility.FromJson<BuildObjcetDataWrapper>(data);
 
-            buildObjectDataList.Add(buildObjectData);
+
+            return LoadBuildings(buildObjcetDataWrapper);
         }
+        #endregion
 
-        _wrapper.objects = buildObjectDataList.ToArray();
 
-        buildObjcetDataWrapper = _wrapper;
-
-        return true;
-    }
-    private bool GetBuildingData(ref BuildObjectData buildObjectData, int i)
-    {
-        GameObject gameObject = transform.GetChild(i).gameObject;
-
-        buildObjectData.position = gameObject.transform.position;
-        buildObjectData.rotation = gameObject.transform.rotation;
-        if (gameObject.TryGetComponent(out IGetItemData getItemData))
+        private bool SaveBuildings(out BuildObjcetDataWrapper buildObjcetDataWrapper)
         {
-            BuidingItemData itemData = getItemData.GetItemData();
-            buildObjectData.name = itemData.ItemName;
-            buildObjectData.itemcode = itemData.ItemCode;
-            buildObjectData.hp = itemData.HP;
-        }
+            List<BuildObjectData> buildObjectDataList = new List<BuildObjectData>();
+            BuildObjcetDataWrapper _wrapper = new();
 
-        return true;
-    }
-
-
-    
-    private bool LoadBuildings(BuildObjcetDataWrapper buildObjcetDataWrapper)
-    {            
-        foreach (BuildObjectData buildObjectData in buildObjcetDataWrapper.objects)
-        {
-            CreateBuilding(buildObjectData);
-        }
-        return true;
-    }
-
-    
-    private bool CreateBuilding(BuildObjectData buildingdata)
-    {
-        if(!CreateBuildPrefab(out GameObject createobject)) return false;
-
-        if (!InitializeBuilding(createobject, buildingdata)) return false;
-
-        return true;
-    }
-
-    private bool CreateBuildPrefab(out GameObject buildPrefab)
-    {
-        buildPrefab = null;
-        if (_buildParent == null) return false;
-
-        if (PhotonNetwork.IsConnected == false)
-        {
-            buildPrefab = Instantiate(_buildParent, this.transform);
-        }
-        else if (PhotonNetwork.IsMasterClient)
-        {
-            buildPrefab = PhotonNetwork.Instantiate(_buildParent.name, transform.position, Quaternion.identity, 0);
-        }
-        else return false;
-
-        if (buildPrefab == null) return false;
-
-        return true;
-    }
-
-    private bool InitializeBuilding(GameObject createobject, BuildObjectData buildingdata)
-    {
-        createobject.transform.position = buildingdata.position;
-        createobject.transform.rotation = buildingdata.rotation;
-        if (createobject.TryGetComponent(out Building building))
-        {
-            if (building.TryGetComponent(out ISetBuildingItemData setBuildingItemData))
+            for (int i = 0; i < transform.childCount; i++)
             {
-                setBuildingItemData.SetBuildingItemData(buildingdata.itemcode, buildingdata.hp);
+                BuildObjectData buildObjectData = new();
+                GetBuildingData(ref buildObjectData, i);
+
+                buildObjectDataList.Add(buildObjectData);
             }
+
+            _wrapper._buildObjectDataWrapper = buildObjectDataList.ToArray();
+
+            buildObjcetDataWrapper = _wrapper;
+            
+
+            return true;
+        }
+        private bool GetBuildingData(ref BuildObjectData buildObjectData, int i)
+        {
+            GameObject gameObject = transform.GetChild(i).gameObject;
+
+            buildObjectData.position = gameObject.transform.position;
+            buildObjectData.rotation = gameObject.transform.rotation;
+            if (gameObject.TryGetComponent(out IGetItemData getItemData))
+            {
+                BuidingItemData itemData = getItemData.GetItemData();
+                buildObjectData.name = itemData.ItemName;
+                buildObjectData.itemcode = itemData.ItemCode;
+                buildObjectData.hp = itemData.HP;
+            }
+
+            return true;
         }
 
-        return true;
-    }
 
+
+        private bool LoadBuildings(BuildObjcetDataWrapper buildObjcetDataWrapper)
+        {
+            foreach (BuildObjectData buildObjectData in buildObjcetDataWrapper._buildObjectDataWrapper)
+            {
+                CreateBuilding(buildObjectData);
+            }
+            return true;
+        }
+
+
+        private bool CreateBuilding(BuildObjectData buildingdata)
+        {
+            if (!CreateBuildPrefab(out GameObject createobject)) return false;
+
+            if (!InitializeBuilding(createobject, buildingdata)) return false;
+
+            return true;
+        }
+
+        private bool CreateBuildPrefab(out GameObject buildPrefab)
+        {
+            buildPrefab = null;
+            if (_buildParent == null) return false;
+
+            if (PhotonNetwork.IsConnected == false)
+            {
+                buildPrefab = Instantiate(_buildParent, this.transform);
+            }
+            else if (PhotonNetwork.IsMasterClient)
+            {
+                buildPrefab = PhotonNetwork.Instantiate(_buildParent.name, transform.position, Quaternion.identity, 0);
+            }
+            else return false;
+
+            if (buildPrefab == null) return false;
+
+            return true;
+        }
+
+        private bool InitializeBuilding(GameObject createobject, BuildObjectData buildingdata)
+        {
+            createobject.transform.position = buildingdata.position;
+            createobject.transform.rotation = buildingdata.rotation;
+            if (createobject.TryGetComponent(out Building building))
+            {
+                if (building.TryGetComponent(out ISetBuildingItemData setBuildingItemData))
+                {
+                    setBuildingItemData.SetBuildingItemData(buildingdata.itemcode, buildingdata.hp);
+                }
+            }
+
+            return true;
+        }
+
+    }
 }
+

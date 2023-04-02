@@ -1,87 +1,91 @@
 using System.Collections.Generic;
 using UnityEngine;
-public interface ISetActive_CreateCanvas
-{
-    void SetActive_CreateCanvas(bool param);
-}
-public class MainSceneCanvasManager : MonoBehaviour, ISetActive_CreateCanvas
-{
-    #region singleton
-    private static MainSceneCanvasManager _instance = null;
 
-    void Awake()
+namespace MyNamespace
+{
+    public interface ISetActive_CreateCanvas
     {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-        GoToDefaultScene();
+        void SetActive_CreateCanvas(bool param);
     }
-    public static MainSceneCanvasManager Instance
+    public class MainSceneCanvasManager : MonoBehaviour, ISetActive_CreateCanvas
     {
-        get
+        #region singleton
+        private static MainSceneCanvasManager _instance = null;
+
+        void Awake()
         {
-            if (null == _instance)
+            if (_instance == null)
             {
-                return null;
+                _instance = this;
             }
-            return _instance;
+            else
+            {
+                Destroy(this.gameObject);
+            }
+            GoToDefaultScene();
         }
-    }
-    #endregion
-    [SerializeField] private List<GameObject> scenes;
-    [SerializeField] private GameObject _createCanvas;
-    public void SetActive_CreateCanvas(bool isActive)
-    {
-        _createCanvas.SetActive(isActive);
-    }
-
-    public void Connect(string gamename, string mapname)
-    {
-        GetComponent<GameJoinManager>().Connect(gamename, mapname);
-    }
-
-
-    public void GoToGameStartScene()
-    {
-        ChangeScene("Game Start Menu Canvs");
-    }
-
-    public void GoToStoreScene()
-    {
-        ChangeScene("Store Canvas");
-    }
-
-    public void GoToOptionScene()
-    {
-        ChangeScene("Option Canvas");
-    }
-
-    public void GoToQuitGameScene()
-    {
-        ChangeScene("Quit Canvas");
-    }
-
-    public void GoToDefaultScene()
-    {
-        ChangeScene("Main Menu Canvas");
-    }
-    public void BackButton()
-    {
-        GoToDefaultScene();
-    }
-
-    private void ChangeScene(string sceneName)
-    {
-        foreach (GameObject sceneObject in scenes)
+        public static MainSceneCanvasManager Instance
         {
-            bool isActive = sceneObject.name == sceneName;
-            sceneObject.SetActive(isActive);
+            get
+            {
+                if (null == _instance)
+                {
+                    return null;
+                }
+                return _instance;
+            }
         }
-    }
+        #endregion
+        [SerializeField] private List<GameObject> scenes;
+        [SerializeField] private GameObject _createCanvas;
+        public void SetActive_CreateCanvas(bool isActive)
+        {
+            _createCanvas.SetActive(isActive);
+        }
 
+        public void Connect(string gamename, string mapname)
+        {
+            GetComponent<GameJoinManager>().Connect(gamename, mapname);
+        }
+
+
+        public void GoToGameStartScene()
+        {
+            ChangeScene("Game Start Menu Canvs");
+        }
+
+        public void GoToStoreScene()
+        {
+            ChangeScene("Store Canvas");
+        }
+
+        public void GoToOptionScene()
+        {
+            ChangeScene("Option Canvas");
+        }
+
+        public void GoToQuitGameScene()
+        {
+            ChangeScene("Quit Canvas");
+        }
+
+        public void GoToDefaultScene()
+        {
+            ChangeScene("Main Menu Canvas");
+        }
+        public void BackButton()
+        {
+            GoToDefaultScene();
+        }
+
+        private void ChangeScene(string sceneName)
+        {
+            foreach (GameObject sceneObject in scenes)
+            {
+                bool isActive = sceneObject.name == sceneName;
+                sceneObject.SetActive(isActive);
+            }
+        }
+
+    }
 }
