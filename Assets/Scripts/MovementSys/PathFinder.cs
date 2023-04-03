@@ -33,13 +33,6 @@ public class PathFinder : MonoBehaviour
                 }
             }
         }
-        if(_path.corners.Length > 0)
-        {
-            for (int i = 0; i < _path.corners.Length; i++)
-            {
-                Debug.DrawLine(_path.corners[i], _path.corners[i + 1], Color.red);
-            }
-        }
         
     }
 
