@@ -55288,7 +55288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57bb0ea1d54e41f4889e245cd1d5ec81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrivalRange: 0.2
+  arrivalRange: 0.6
 --- !u!1 &8742011789093536954
 GameObject:
   m_ObjectHideFlags: 0

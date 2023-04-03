@@ -29502,7 +29502,7 @@ MonoBehaviour:
     angleEnd: 350
     lightValueStart: 0.1
     lightValueEnd: 0.1
-  cycleDuration: 10
+  cycleDuration: 1
 --- !u!1001 &1130564374
 PrefabInstance:
   m_ObjectHideFlags: 0
