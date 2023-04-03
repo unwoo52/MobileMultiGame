@@ -1,7 +1,5 @@
-using System;
-using Unity.VisualScripting;
+using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace MyNamespace
@@ -64,8 +62,17 @@ namespace MyNamespace
             Transform InstallObjectParent = InGameManager.Instance.PlayerInstalledObjectsParent.transform;
 
             //건물 설치를 컨트롤하는 프레펩 오브젝트(스크립트만 있는 오브젝트)를 생성
-            buildObject = Instantiate(_buildParent, InstallObjectParent);
+            if (PhotonNetwork.IsConnected == false)
+            {
+                buildObject = Instantiate(_buildParent, InstallObjectParent);
+            }
+            else
+            {
+                buildObject = PhotonNetwork.Instantiate(_buildParent.name, Vector3.zero, Quaternion.identity, 0);
+                buildObject.transform.SetParent(InstallObjectParent, false);
+            }
 
+            
             //CreateBuildObject 기능은 위에 코드에서 만든 object의 스크립트에게 이관
             //설치할 건물 데이터 불러오기
             if (!GetBuildObjectAtItemData(out BuidingItemData itemData)) return false;

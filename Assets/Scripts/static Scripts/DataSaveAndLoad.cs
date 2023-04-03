@@ -79,7 +79,47 @@ public static class DataSaveAndLoad
     #endregion
 
     #region json methods
+    public static List<T> LoadJsonFilesInDirectory<T>(string directoryPath) where T : class
+    {
+        List<T> dataList = new List<T>();
 
+        DirectoryInfo dir = new DirectoryInfo(directoryPath);
+        FileInfo[] fileInfos = dir.GetFiles("*.json");
+
+        foreach (FileInfo fileInfo in fileInfos)
+        {
+            try
+            {
+                using (StreamReader reader = new StreamReader(fileInfo.FullName))
+                {
+                    string json = reader.ReadToEnd();
+                    T data = JsonUtility.FromJson<T>(json);
+                    dataList.Add(data);
+                }
+            }
+            catch (Exception e) 
+            {
+                dataList.Add(e as T);
+            }
+            
+        }
+
+        return dataList;
+    }
+    public static List<string> LoadJsonStringFilesInDirectory(string directoryPath)
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+        FileInfo[] fileInfo = directoryInfo.GetFiles("*.json");
+        List<string> jsonDataList = new List<string>();
+
+        foreach (FileInfo file in fileInfo)
+        {
+            string jsonData = File.ReadAllText(file.FullName);
+            jsonDataList.Add(jsonData);
+        }
+
+        return jsonDataList;
+    }
     public static bool LoadDataoneIMSIMUSTBESUJANG(out string json, string filepath, string filename)
     {
         json = null;

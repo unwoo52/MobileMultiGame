@@ -9,10 +9,9 @@ public class PathFinder : MonoBehaviour
 
     private NavMeshPath _path = null;
 
-    private NavMeshAgent _agent;
-
-    private float arrivalRange = 0.1f;
+    [SerializeField]private float arrivalRange = 0.1f;
     private int currentCornerIndex = 0;
+
 
     private void Awake()
     {
@@ -20,29 +19,28 @@ public class PathFinder : MonoBehaviour
         _path = new NavMeshPath();
     }
 
-
-    public void SetDestination(Vector3 dest)
+    private void Update()
     {
-        _path.ClearCorners();
-        _agent.ResetPath();
-        if(_agent.CalculatePath(dest, _path))
+        if (Input.GetMouseButtonDown(0))
         {
-
-            StartCoroutine(WaitPathComplete(dest));
-        }
-    }
-
-    IEnumerator WaitPathComplete(Vector3 dest)
-    {
-        while(true){
-            if (_path.status == NavMeshPathStatus.PathComplete)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (coNavmove != null) StopCoroutine(coNavmove);
-                coNavmove = StartCoroutine(NavMove(_path.corners));
-                yield break;
+                if (NavMesh.CalculatePath(transform.position, hit.point, 1 << NavMesh.GetAreaFromName("Walkable"), _path))
+                {
+                    if(coNavmove != null) { StopCoroutine(coNavmove); }
+                    coNavmove = StartCoroutine(NavMove(_path.corners));
+                }
             }
-            yield return null;
         }
+        if(_path.corners.Length > 0)
+        {
+            for (int i = 0; i < _path.corners.Length; i++)
+            {
+                Debug.DrawLine(_path.corners[i], _path.corners[i + 1], Color.red);
+            }
+        }
+        
     }
 
     IEnumerator NavMove(Vector3[] pointlist)

@@ -25,6 +25,8 @@ namespace MyNamespace
     class TotalDataClass
     {
         [SerializeField] public string[] jsondatastring;
+        public string _gameName;
+        public string _mapName;
     }
     public class GameDataManager : MonoBehaviour, IAllGameDataSave, IAllGameDataLoad
     {
@@ -84,21 +86,6 @@ namespace MyNamespace
             }
 
             List<GameObject> GameObjectListForDataLoading = InGameManager.Instance.GameObjectListForDataLoading;
-            //각각의 데이터 로드 실행
-            //건물 데이터 로드...
-            /*
-            foreach (GameObject obj in GameObjectListForDataLoading)
-            {
-                if (!LoadDataToGameObject(obj, data))
-                {
-                    Debug.LogError($"Failed to load data for {obj.name}.");
-
-                    //set fail flag
-                    if(loadDataFlag.TryGetValue(mapname, out byte temp)){
-                        FlagTool.SetBit(ref failFlag, temp, true);
-                    }
-                }
-            }*/
 
             int temp = 0;
             foreach(var str in data.jsondatastring)
@@ -144,13 +131,15 @@ namespace MyNamespace
                 }
             }
 
-            TotalDataClass test = new();
-            test.jsondatastring = data.ToArray();
+            TotalDataClass totalDataClass = new();
 
-            Debug.Log(JsonUtility.ToJson(test));
+            totalDataClass._gameName = gamename;
+            totalDataClass._mapName = mapname;
+            totalDataClass.jsondatastring = data.ToArray();
+
 
             //모인 데이터들을 취합이 끝난 뒤, 세이브
-            DataSaveAndLoad.SaveToJson(test, Application.dataPath + "/Saved/GameData", gamename);
+            DataSaveAndLoad.SaveToJson(totalDataClass, Application.dataPath + "/Saved/GameData", gamename);
 
             return temp;
         }

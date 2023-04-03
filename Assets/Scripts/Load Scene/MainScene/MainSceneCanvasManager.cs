@@ -24,6 +24,7 @@ namespace MyNamespace
             }
             GoToDefaultScene();
         }
+
         public static MainSceneCanvasManager Instance
         {
             get

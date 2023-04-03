@@ -29,7 +29,7 @@ public class Building : MonoBehaviour, IGetItemData, ICreateBuilding, ISetActive
         _itemdata = itemData;
 
         //doBuildProcess
-        _createBuilding.BuildProcess(out buildObject, _itemdata);
+        _createBuilding.StartBuildProcess(out buildObject, _itemdata);
     }
 
     public BuidingItemData GetItemData()
@@ -41,7 +41,7 @@ public class Building : MonoBehaviour, IGetItemData, ICreateBuilding, ISetActive
     {
         _itemdata = _itemDatabase.Items[_code] as BuidingItemData;
         _hp = hp;
-        _createBuilding.BuildProcess(out buildObject, _itemdata);
+        _createBuilding.StartBuildProcess(out buildObject, _itemdata);
     }
     public void SetObjectActive(bool b)
     {

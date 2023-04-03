@@ -24,16 +24,26 @@ namespace MyNamespace
         private Transform ContentParent;
         [SerializeField]
         private GameObject gameSaveManager;
-        private MapData _mapdata = new MapData();
+        private MapData _mapdata;
         [SerializeField]
         private string _savegamePath;
         public TMP_Dropdown dropdown;
 
         private void Start()
         {
-            _savegamePath = Application.dataPath + "/Saved/GameInMainScene";
+            _savegamePath = Application.dataPath + "/Saved/GameData";
             dropdown.onValueChanged.AddListener(OnValueChanged);
+            InitMapdata();
+            CheckGameSaveManagerIsEmpty();
+            LoadSaveGames();
+        }
+        private void InitMapdata()
+        {
+            _mapdata = new MapData();
             _mapdata._mapName = "Map A";
+        }
+        private void CheckGameSaveManagerIsEmpty()
+        {
             if (gameSaveManager == null)
             {
                 GameObject gameSaveManagerObject = GameObject.Find("GameSaveManager");
@@ -42,18 +52,32 @@ namespace MyNamespace
                     gameSaveManager = gameSaveManagerObject;
                 }
             }
-            LoadSaveGame();
         }
-        private void LoadSaveGame()
+        private void LoadSaveGames()
         {
-            List<MapData> list;
-            list = DataSaveAndLoad.LoadBinaryFiles<MapData>(_savegamePath);
-            //LoadBinaryFiles 를참조중이니, createnewgame 코드 리팩토링 하거나 아니면 게임 저장을 (게임이름 + 게임 데이터)통합으로 바꿀 때 LoadBinaryFiles도 리뉴얼 하기.
-            //(게임이름 + 게임 데이터)통합으로 바꾼다면, load씬에서 데이터 로드도 끝나면 씬 전환이 이루어지게 해도 괜찮을듯
+            List<TotalDataClass> list = DataSaveAndLoad.LoadJsonFilesInDirectory<TotalDataClass>(_savegamePath);
 
-            foreach (MapData mapdata in list)
+            foreach (var mapdata in list)
             {
-                CreateGame(mapdata._gameName, mapdata._mapName);
+                if(mapdata == null)
+                {
+                    Debug.LogError($"The map data is null : {mapdata}");
+                    continue;
+                }
+                if (mapdata._gameName == null)
+                {
+                    Debug.LogError($"The map data does not have a variable named mapdata._gameName : {mapdata}");
+                    continue;
+                }
+
+                try
+                {
+                    CreateGame(mapdata._gameName, mapdata._mapName);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"fail load : {e}");
+                }
             }
         }
 
@@ -95,6 +119,14 @@ namespace MyNamespace
         }
         private bool CreateGame(string gamename, string mapname)
         {
+            if(!CreateGamePrefab(gamename, mapname)) return false;
+            SaveCreatedGame();
+            SetActiveCreateCanvas(false);
+
+            return true;
+        }
+        private bool CreateGamePrefab(string gamename, string mapname)
+        {
             GameObject GamePrefab = Instantiate(newGamePrefab, ContentParent);
             if (GamePrefab == null) return false;
 
@@ -104,18 +136,14 @@ namespace MyNamespace
             }
             else return false;
 
-
-            SetActiveCreateCanvas(false);
-            SaveCreatedGame();
-
             return true;
         }
-
         private void SaveCreatedGame()
         {
-            
-            string filename = $"{_mapdata._gameName}.bin";
-            DataSaveAndLoad.SaveBinary(_savegamePath, filename, _mapdata);
+            TotalDataClass test = new();
+            test._gameName = _mapdata._gameName;
+            test._mapName = _mapdata._mapName;
+            DataSaveAndLoad.SaveToJson(test, Application.dataPath + "/Saved/GameData", _mapdata._gameName);
         }
         public void CancelCreateGame()
         {

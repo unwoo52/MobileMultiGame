@@ -26,13 +26,14 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, 
         Destroy(this);
         return true;
     }
-    public bool BuildProcess(out GameObject buildobject, BuidingItemData itemData)
-    {
-        GameObject gameObject;
-        buildobject = null;
-        if(!InstantiateBuilding(out gameObject, itemData)) return false;
-        buildobject = gameObject;
-        this.buildObject = gameObject;
+    public bool StartBuildProcess(out GameObject buildobject, BuidingItemData itemData)
+    {        
+        if(!InstantiateBuilding(out buildobject, itemData))
+        {
+            buildobject = null;
+            return false;
+        }
+        this.buildObject = buildobject;
         return true;
     }
     public void CompleteBuildObject()
@@ -42,8 +43,11 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, 
 
     public void SetBuildObjectPos(Vector3 vector3)
     {
+        //get half of height
         Renderer renderer = buildObject.GetComponent<Renderer>();
         float height = renderer.bounds.size.y;
+
+        //set position
         transform.position = new Vector3(vector3.x, vector3.y + height / 2f, vector3.z);
     }
 
@@ -54,7 +58,7 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, 
         {
             buildingObject = Instantiate(buidingItemData.ItemPrefab, this.transform);
         }
-        else if (PhotonNetwork.IsMasterClient)
+        else
         {
             buildingObject = PhotonNetwork.Instantiate(buidingItemData.ItemPrefab.name, transform.position, Quaternion.identity, 0);
             buildingObject.transform.parent = this.transform;

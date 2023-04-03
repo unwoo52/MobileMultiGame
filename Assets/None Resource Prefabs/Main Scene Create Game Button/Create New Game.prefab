@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6265090950446868364}
   - component: {fileID: 6265090950446868365}
   - component: {fileID: 6265090950446868366}
+  - component: {fileID: 502697864}
   m_Layer: 5
   m_Name: Create New Game
   m_TagString: Untagged
@@ -122,7 +123,38 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6265090950446868365}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 502697864}
+        m_TargetAssemblyTypeName: CreateNewGame, Assembly-CSharp
+        m_MethodName: CreateGame_StartCreate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &502697864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6265090950446868360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82af8cd0d1c1ec8478d3d24fe1e89bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CreateGameCanvas: {fileID: 0}
+  newGamePrefab: {fileID: 2556027781618420987, guid: d5955c6aa1d83c1488e62729d6a2347f,
+    type: 3}
+  ContentParent: {fileID: 0}
+  gameSaveManager: {fileID: 0}
+  _savegamePath: Assets/Saved/GameInMainScene
+  dropdown: {fileID: 0}
 --- !u!1 &6265090951821001374
 GameObject:
   m_ObjectHideFlags: 0
