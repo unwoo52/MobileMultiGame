@@ -14,12 +14,6 @@ namespace Com.MyCompany.MyGame
     /// </summary>
     public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
-#if UNITY_5_4_OR_NEWER
-        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
-        {
-            this.CalledOnLevelWasLoaded(scene.buildIndex);
-        }
-#endif
         public override void OnDisable()
         {
             // Always call the base to remove callbacks
@@ -207,6 +201,13 @@ namespace Com.MyCompany.MyGame
                 this.Health = (float)stream.ReceiveNext();
             }
         }
+
+#if UNITY_5_4_OR_NEWER
+        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
+        {
+            this.CalledOnLevelWasLoaded(scene.buildIndex);
+        }
+#endif
 
 #if !UNITY_5_4_OR_NEWER
 /// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>

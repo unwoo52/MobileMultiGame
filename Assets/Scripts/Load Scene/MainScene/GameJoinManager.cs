@@ -18,7 +18,16 @@ namespace MyNamespace
         private void Start()
         {
             Screen.fullScreen = false;
-            Screen.SetResolution(800, 600, false);
+            int width = Screen.width;
+            int height = Screen.height;
+            if (Application.isEditor)
+            {
+                Screen.SetResolution(width, height, false); // 에디터에서 실행 중일 때 해상도 설정
+            }
+            else
+            {
+                Screen.SetResolution(3040/3, 1440/3, false);
+            }
         }
 
         public void Connect(string gamename, string mapname)

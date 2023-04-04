@@ -9,7 +9,7 @@ namespace MyNamespace
     {
         void GetZombieSpawner();
     }
-    public class ZombieSpawnerManager : MonoBehaviour, IMorningCallback, INightCallback
+    public class ZombieSpawnerManager : MonoBehaviour
     {
         [SerializeField] List<GameObject> spawnerList;
         public void MorningCallback()

@@ -1848,6 +1848,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8204059955884538289}
   - {fileID: 5909198040262937702}
+  - {fileID: 2426764106897480346}
   - {fileID: 5460648947648807924}
   sceneViewId: 0
   InstantiationId: 0
@@ -1874,13 +1875,13 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: IsMove
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Horizontal
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Vertical
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Hand State
   m_SynchronizeLayers:
   - SynchronizeType: 0

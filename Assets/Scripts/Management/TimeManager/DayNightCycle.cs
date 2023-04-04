@@ -1,22 +1,40 @@
+using MyNamespace;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public interface ICycleCallback
-{
-    void OnCycle(float timeOfDay);
-}
-public interface IMorningCallback
-{
-    void MorningCallback();
-}
-public interface INightCallback
-{
-    void NightCallback();
-}
 
 public class DayNightCycle : MonoBehaviour
 {
+    #region singleton
+    private static DayNightCycle _instance = null;
+    void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    public static DayNightCycle Instance
+    {
+        get
+        {
+            if (null == _instance)
+            {
+                return null;
+            }
+            return _instance;
+        }
+    }
+    #endregion
+
+    public UnityEvent MorningCallbackEvent;
+    public UnityEvent NightCallbackEvent;
     [System.Serializable]
     public class TimePeriod
     {
@@ -40,9 +58,6 @@ public class DayNightCycle : MonoBehaviour
 
         [Tooltip("시간대 동안 빛의 밝기 강도의 끝값입니다.")]
         public float lightValueEnd;
-
-        [Tooltip("시간대에서 실행할 콜백 함수입니다.")]
-        public ICycleCallback callback;
     }
 
     [SerializeField] List<Component> CallBackBehaviorScripts;
@@ -51,13 +66,14 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] List<TimePeriod> timePeriods = new List<TimePeriod>();
     [SerializeField] float cycleDuration = 1.0f;
 
-    private float startTime;
+    private float _startTime;
+    public float StartTime => _startTime;
     private float currentLightValue;
     private TimePeriod currentPeriod;
 
     private void Start()
     {
-        startTime = Time.time;
+        _startTime = Time.time;
         currentPeriod = GetCurrentTimePeriod();
 
         StartCoroutine(TESTCORUTINE());
@@ -72,7 +88,6 @@ public class DayNightCycle : MonoBehaviour
 
 
         UpdateLightValue(timeOfDay);
-        ExecuteCallback(currentPeriod, timeOfDay);
     }
     IEnumerator TESTCORUTINE()
     {
@@ -96,7 +111,7 @@ public class DayNightCycle : MonoBehaviour
     /// <returns>현재 시간을 하루의 비율(0~1)로 표현한 값을 반환합니다. 예를 들어 하루의 중간이라면 0.5를 반환합니다.</returns>
     private float GetTimeofDay(float cycleDuration)
     {
-        return (((Time.time - startTime) / 60.0f) / cycleDuration) % 1;
+        return (((Time.time - _startTime) / 60.0f) / cycleDuration) % 1;
     }
 
     private void UpdateLightValue(float timeOfDay)
@@ -111,19 +126,6 @@ public class DayNightCycle : MonoBehaviour
         directionalLight.intensity = currentLightValue;
     }
 
-    private void ExecuteCallback(TimePeriod period, float timeOfDay)
-    {
-        if (period == null) return;
-        if (period.callback != null) period.callback.OnCycle(timeOfDay);
-        if (currentPeriod != period)
-        {
-            if (currentPeriod == null || currentPeriod.name != period.name)
-            {
-                ExecuteCallback(period.name + "Callback");
-            }
-        }
-    }
-
     private float GetNormalizedDifference(float start, float end)
     {
         float diff = end - start;
@@ -134,10 +136,6 @@ public class DayNightCycle : MonoBehaviour
         return diff;
     }
 
-    private void ExecuteCallback(string name)
-    {
-        SendMessage(name, SendMessageOptions.DontRequireReceiver);
-    }
     /// <summary>현재 시간대 TimePeriod을 찾아서 반환합니다.</summary>
     private TimePeriod GetCurrentTimePeriod()
     {
@@ -160,11 +158,11 @@ public class DayNightCycle : MonoBehaviour
     {
         if(period.name == "Night")
         {
-            NightCallback();
+            NightCallbackEvent.Invoke();
         }
         else if (period.name == "morning")
         {
-            MorningCallback();
+            MorningCallbackEvent.Invoke();
         }
     }
 
@@ -181,25 +179,5 @@ public class DayNightCycle : MonoBehaviour
         //일반 period
 
         return (timeOfDay >= period.startTime && timeOfDay < period.endTime);
-    }
-
-
-    private void MorningCallback()
-    {
-        if (CallBackBehaviorScripts.Count == 0) return;
-        foreach (Component com in CallBackBehaviorScripts)
-        {
-            if (com == null) continue;
-            if (com.TryGetComponent(out IMorningCallback morningCallback)) morningCallback.MorningCallback();
-        }
-    }
-    private void NightCallback()
-    {
-        if (CallBackBehaviorScripts.Count == 0) return;
-        foreach (Component com in CallBackBehaviorScripts)
-        {
-            if (com == null) continue;
-            if (com.TryGetComponent(out INightCallback nightCallback)) nightCallback.NightCallback();
-        }
     }
 }

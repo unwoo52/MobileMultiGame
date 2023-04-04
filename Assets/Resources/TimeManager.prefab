@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9094635993558705531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9094635993558705530}
+  - component: {fileID: 9094635993558705529}
+  m_Layer: 0
+  m_Name: TimeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9094635993558705530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9094635993558705531}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9094635993558705529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9094635993558705531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5e6fb03e673d14f8181134a3d57208, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CallBackBehaviorScripts:
+  - {fileID: 0}
+  directionalLight: {fileID: 0}
+  timePeriods:
+  - name: morning
+    startTime: 0.9
+    endTime: 0.1
+    angleStart: 350
+    angleEnd: 10
+    lightValueStart: 0.1
+    lightValueEnd: 2
+  - name: Noon
+    startTime: 0.1
+    endTime: 0.2
+    angleStart: 10
+    angleEnd: 170
+    lightValueStart: 2
+    lightValueEnd: 2
+  - name: twillight
+    startTime: 0.2
+    endTime: 0.3
+    angleStart: 170
+    angleEnd: 190
+    lightValueStart: 2
+    lightValueEnd: 0.1
+  - name: Night
+    startTime: 0.3
+    endTime: 0.9
+    angleStart: 190
+    angleEnd: 350
+    lightValueStart: 0.1
+    lightValueEnd: 0.1
+  cycleDuration: 1
