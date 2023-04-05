@@ -1,7 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviourPun
+public class PlayerMovement : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private VariableJoystick variableJoystick;
     [SerializeField] private AnimContoller animContoller;
@@ -41,6 +41,18 @@ public class PlayerMovement : MonoBehaviourPun
             {
                 transform.Rotate(Vector3.up, variableJoystick.Horizontal * rotateSpeed * Time.deltaTime);
             }
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+        }
+        else
+        {
+            // Network player, receive data
         }
     }
 }

@@ -11,22 +11,6 @@ namespace MyNamespace
         [Tooltip("로컬 플레이어 인스턴스입니다. 이를 통해 로컬 플레이어가 씬(scene)에 표시되는지 확인합니다")]
         public static GameObject LocalPlayerInstance;
 
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                // We own this player: send the others our data
-                //stream.SendNext(IsFiring);
-                //stream.SendNext(Health);
-            }
-            else
-            {
-                // Network player, receive data
-                //this.IsFiring = (bool)stream.ReceiveNext();
-                //this.Health = (float)stream.ReceiveNext();
-            }
-        }
-
         private void Awake()
         {
             if (photonView.IsMine)
@@ -58,15 +42,17 @@ namespace MyNamespace
             InGameManager.Instance.LeaveRoom();
         }
 
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
 
-#if UNITY_5_4_OR_NEWER
-        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
-        {
-            this.CalledOnLevelWasLoaded(scene.buildIndex);
+            if (stream.IsWriting)
+            {
+                // We own this player: send the others our data
+            }
+            else
+            {
+                // Network player, receive data
+            }
         }
-        void CalledOnLevelWasLoaded(int level)
-        {
-        }
-#endif
     }
 }

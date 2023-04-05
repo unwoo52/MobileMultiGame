@@ -20,6 +20,7 @@ public class TestItemMakeScript : MonoBehaviour
         {
             AddItem(item);
         }
+        Destroy(gameObject);
     }
 
     [ContextMenu("AddItem")]
@@ -28,8 +29,6 @@ public class TestItemMakeScript : MonoBehaviour
         GameObject InstanteObject = Instantiate(_itemPrefab);
         InstanteObject.transform.SetParent(_contentParent.transform, false);
         InstanteObject.transform.localScale = Vector3.one;
-
-
 
         if(InstanteObject.TryGetComponent(out Item itemScript))
         {

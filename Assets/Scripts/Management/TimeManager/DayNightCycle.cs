@@ -1,14 +1,18 @@
 using MyNamespace;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 
-public class DayNightCycle : MonoBehaviour
+public class DayNightCycle : MonoBehaviourPunCallbacks
 {
     #region singleton
     private static DayNightCycle _instance = null;
+    
+
     void Awake()
     {
         if (_instance == null)
@@ -61,40 +65,83 @@ public class DayNightCycle : MonoBehaviour
     }
 
     [SerializeField] List<Component> CallBackBehaviorScripts;
+    [SerializeField] private Light _directionalLight;
 
-    [SerializeField] Light directionalLight;
+    public Light DirectionalLight
+    {
+        get => _directionalLight;
+        set => _directionalLight = value;
+    }
     [SerializeField] List<TimePeriod> timePeriods = new List<TimePeriod>();
+
+    //하루를 cycleDuration분으로 정의합니다. cycleDuration이 n이면 하루는 n분동안 진행됩니다.
     [SerializeField] float cycleDuration = 1.0f;
 
-    private float _startTime;
-    public float StartTime => _startTime;
     private float currentLightValue;
     private TimePeriod currentPeriod;
 
+    public double _baseTime;
     private void Start()
     {
-        _startTime = Time.time;
+        PhotonView photonView = GetComponent<PhotonView>();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _baseTime = PhotonNetwork.Time;
+            photonView.RPC("SetBaseTime", RpcTarget.Others, _baseTime);
+        }
+
         currentPeriod = GetCurrentTimePeriod();
 
-        StartCoroutine(TESTCORUTINE());
+        _baseTimeText = GameObject.Find("BaseTimeText").GetComponent<TMP_Text>();
     }
+    #region Photon
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // 새로운 플레이어에게 현재의 _baseTime을 전달합니다.
+            photonView.RPC(nameof(SetBaseTime), newPlayer, _baseTime);
+        }
+    }
+    [SerializeField] private TMP_Text _baseTimeText;
+    [PunRPC]
+    private void SetBaseTime(double baseTime)
+    {
+        _baseTime = baseTime;
+    }
+
+    // 게임 시간을 반환합니다.
+    public float GetGameTime()
+    {
+        // Master Client에서는 PhotonNetwork.Time에서 방 생성 시간을 빼서 게임 시간을 구합니다.
+        if (PhotonNetwork.IsMasterClient)
+        {
+            return (float)(PhotonNetwork.Time - _baseTime);
+        }
+        // 다른 플레이어들은 Master Client로부터 전달받은 방 생성 시간을 사용하여 게임 시간을 구합니다.
+        else
+        {
+            return (float)((PhotonNetwork.Time - PhotonNetwork.GetPing() / 2000f) - _baseTime);
+        }
+    }
+    #endregion
 
     private void Update()
     {
-        float timeOfDay = GetTimeofDay(cycleDuration);
+        //현재 시간대 정의 (아침 낮 밤 등..)
         currentPeriod = GetCurrentTimePeriod();
-        
+
+        //시간 비율 timeOfDay에 반환. ex)12시정각이면 0.5 반환, 하루의 시작이면 0 반환
+        float timeOfDay = GetTimeofDay(cycleDuration);
+
         SetSunAngle(timeOfDay);
 
-
         UpdateLightValue(timeOfDay);
-    }
-    IEnumerator TESTCORUTINE()
-    {
-        while (true)
+
+        //photon test UI
+        if (_baseTimeText != null)
         {
-            float timeOfDay = GetTimeofDay(cycleDuration);
-            yield return new WaitForSeconds(1);
+            _baseTimeText.text = "Base Time : " + _baseTime.ToString() + "\n timeOfDay :" + timeOfDay.ToString();
         }
     }
     private void SetSunAngle(float timeOfDay)
@@ -103,15 +150,28 @@ public class DayNightCycle : MonoBehaviour
         float timeZoneTime = GetNormalizedDifference(currentPeriod.startTime, currentPeriod.endTime);
         float t = (timeOfDay - currentPeriod.startTime) < 0? (timeOfDay - currentPeriod.startTime) + 1 : (timeOfDay - currentPeriod.startTime);
         float sunAngle = Mathf.Lerp(currentPeriod.angleStart, currentPeriod.angleEnd, t / timeZoneTime);
-        directionalLight.transform.localRotation = Quaternion.Euler(new Vector3(sunAngle, 0.0f, 0.0f));
+        _directionalLight.transform.localRotation = Quaternion.Euler(new Vector3(sunAngle, 0.0f, 0.0f));
     }
-    /// <summary>
-    /// 하루를 cycleDuration분으로 정의합니다. cycleDuration이 n이면 하루는 n분동안 진행됩니다.
-    /// </summary>
-    /// <returns>현재 시간을 하루의 비율(0~1)로 표현한 값을 반환합니다. 예를 들어 하루의 중간이라면 0.5를 반환합니다.</returns>
+
+    /// <summary>현재 시간을 하루의 비율(0~1)로 표현한 값을 반환합니다. 예를 들어 하루의 중간이라면 0.5를 반환합니다.</summary>
     private float GetTimeofDay(float cycleDuration)
     {
-        return (((Time.time - _startTime) / 60.0f) / cycleDuration) % 1;
+
+        // Master Client에서는 PhotonNetwork.Time에서 방 생성 시간을 빼서 게임 시간을 구합니다.
+        if (PhotonNetwork.IsMasterClient)
+        {
+            return (float)((PhotonNetwork.Time - _baseTime) / cycleDuration);
+        }
+        // 다른 플레이어들은 Master Client로부터 전달받은 방 생성 시간을 사용하여 게임 시간을 구합니다.
+        else
+        {
+            return (float)(((PhotonNetwork.Time - PhotonNetwork.GetPing() / 2000f) / cycleDuration) - _baseTime);
+        }
+
+        //(분으로 나눈 값) / cycleDuration
+        //cycleDuration이 1이면 분값. 1은 1분
+        //cycleDuration이 10이면 1은 0.1분
+        //return (((Time.time - (float)_baseTime) / 60.0f) / cycleDuration) % 1;
     }
 
     private void UpdateLightValue(float timeOfDay)
@@ -123,7 +183,7 @@ public class DayNightCycle : MonoBehaviour
 
             currentLightValue = Mathf.Lerp(currentPeriod.lightValueStart, currentPeriod.lightValueEnd, t / timeZoneTime);
         }
-        directionalLight.intensity = currentLightValue;
+        _directionalLight.intensity = currentLightValue;
     }
 
     private float GetNormalizedDifference(float start, float end)

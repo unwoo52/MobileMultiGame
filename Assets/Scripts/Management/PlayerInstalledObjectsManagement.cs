@@ -109,11 +109,12 @@ namespace MyNamespace
             {
                 buildPrefab = Instantiate(_buildParent, this.transform);
             }
-            else if (PhotonNetwork.IsMasterClient)
+            else
             {
                 buildPrefab = PhotonNetwork.Instantiate(_buildParent.name, transform.position, Quaternion.identity, 0);
             }
-            else return false;
+
+            buildPrefab.transform.SetParent(InGameManager.Instance.PlayerInstalledObjectsParent.transform);
 
             if (buildPrefab == null) return false;
 
