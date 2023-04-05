@@ -842,6 +842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 135552037}
   - component: {fileID: 135552036}
+  - component: {fileID: 135552038}
   m_Layer: 6
   m_Name: Point light
   m_TagString: Untagged
@@ -926,6 +927,26 @@ Transform:
   m_Father: {fileID: 993375442}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &135552038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135552035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &171945110
 GameObject:
   m_ObjectHideFlags: 0
@@ -6472,6 +6493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1538686514}
   - component: {fileID: 1538686513}
+  - component: {fileID: 1538686515}
   m_Layer: 6
   m_Name: Point light (1)
   m_TagString: Untagged
@@ -6556,6 +6578,26 @@ Transform:
   m_Father: {fileID: 993375442}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1538686515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538686512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1001 &1561966389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8069,6 +8111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1779389617}
   - component: {fileID: 1779389616}
+  - component: {fileID: 1779389618}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -8153,6 +8196,26 @@ Transform:
   m_Father: {fileID: 993375442}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 76.619, y: -30, z: 0}
+--- !u!114 &1779389618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779389615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1785996959
 GameObject:
   m_ObjectHideFlags: 0

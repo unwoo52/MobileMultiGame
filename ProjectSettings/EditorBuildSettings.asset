@@ -23,4 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.Scenes/Map/Map C.unity
     guid: 96f591aed87519148af8e1294bf3fca7
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: b7c59618100c19b46b1bd26a58866a12, type: 2}
