@@ -32,6 +32,8 @@ namespace MyNamespace
             }
         }
         #endregion
+
+
         [SerializeField] private List<GameObject> _gameObjectListForDataLoading;
         public List<GameObject> GameObjectListForDataLoading
         {

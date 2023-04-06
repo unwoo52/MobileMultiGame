@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace MyNamespace
@@ -29,7 +30,9 @@ namespace MyNamespace
         }
         public void Connet()
         {
-            MainSceneCanvasManager.Instance.Connect(_gameName, _mapName);
+            GameDataManager.Instance.mapname = _mapName;
+            GameDataManager.Instance.gamename = _gameName;
+            SceneManager.LoadScene("LoadScene");
         }
     }
 }

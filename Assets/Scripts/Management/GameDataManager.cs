@@ -57,7 +57,7 @@ namespace MyNamespace
         }
         #endregion
 
-        public string gamename, mapname;
+        public string gamename, mapname, roomname;
 
         private void Start()
         {

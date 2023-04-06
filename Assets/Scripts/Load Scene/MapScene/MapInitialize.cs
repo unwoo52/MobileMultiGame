@@ -81,7 +81,7 @@ namespace MyNamespace
             try
             {
                 GameObject _initobject = PhotonNetwork.Instantiate(_InitManagement.name, Vector3.zero, Quaternion.identity, 0);
-                _initobject.transform.SetParent(transform.parent, false);
+                _initobject.transform.parent = null;
             }
             catch
             {
@@ -95,7 +95,8 @@ namespace MyNamespace
         private bool GameInit_Single()
         {
             GameObject _initobject = Instantiate(_InitManagement);
-            
+            _initobject.transform.parent = null;
+
             return true;
         }
 

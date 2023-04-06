@@ -39,15 +39,13 @@ namespace MyNamespace
         #endregion
         [SerializeField] private List<GameObject> scenes;
         [SerializeField] private GameObject _createCanvas;
+        [SerializeField] private GameObject _joinOtherGameCanvas;
+        public GameObject JoinOtherGameCanvas { get { return _joinOtherGameCanvas;} }
         public void SetActive_CreateCanvas(bool isActive)
         {
             _createCanvas.SetActive(isActive);
         }
 
-        public void Connect(string gamename, string mapname)
-        {
-            GetComponent<GameJoinManager>().Connect(gamename, mapname);
-        }
 
 
         public void GoToGameStartScene()

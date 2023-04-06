@@ -15,7 +15,6 @@ namespace MyNamespace
     }
     public class CreateNewGame : MonoBehaviour
     {
-
         [SerializeField]
         private GameObject _CreateGameCanvas;
         [SerializeField]

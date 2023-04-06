@@ -30,12 +30,6 @@ namespace MyNamespace
             }
         }
 
-        public void Connect(string gamename, string mapname)
-        {
-            GameDataManager.Instance.mapname = mapname;
-            GameDataManager.Instance.gamename = gamename;
-            SceneManager.LoadScene("LoadScene");
-        }
     }
 }
 

@@ -70,7 +70,7 @@ namespace MyNamespace
             buildObjectData.rotation = gameObject.transform.rotation;
             if (gameObject.TryGetComponent(out IGetItemData getItemData))
             {
-                BuidingItemData itemData = getItemData.GetItemData();
+                BuildingItemData itemData = getItemData.GetItemData();
                 buildObjectData.name = itemData.ItemName;
                 buildObjectData.itemcode = itemData.ItemCode;
                 buildObjectData.hp = itemData.HP;

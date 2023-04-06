@@ -59,6 +59,7 @@ namespace MyNamespace
                 // #Critical
                 // Load the Room Level. 
                 string mapName = GameDataManager.Instance.mapname;
+                GameDataManager.Instance.roomname = PhotonNetwork.CurrentRoom.Name;
                 PhotonNetwork.LoadLevel(mapName);
             }
         }

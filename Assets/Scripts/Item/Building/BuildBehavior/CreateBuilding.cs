@@ -1,3 +1,4 @@
+using MyNamespace;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,59 +15,92 @@ public interface ISetBuildObjectPos
 }
 public interface ICompleteBuild
 {
-    void CompleteBuildObject();
+    void CompleteBuildObject(BuildingItemData _itemdata, Vector3 point);
+}
+public interface ISetBuildingMesh
+{
+    bool SetBuildingMesh(Mesh mesh, Material material);
 }
 
-public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, ICompleteBuild
+public class CreateBuilding : MonoBehaviourPun, ICancelbuild,  ISetBuildObjectPos, ICompleteBuild, ISetBuildingMesh
 {
-    GameObject buildObject;
     [SerializeField] Building building;
     public bool CancelBuildObject()
     {
         Destroy(this);
         return true;
     }
-    public bool StartBuildProcess(out GameObject buildobject, BuidingItemData itemData)
-    {        
-        if(!InstantiateBuilding(out buildobject, itemData))
-        {
-            buildobject = null;
-            return false;
-        }
-        this.buildObject = buildobject;
-        return true;
-    }
-    public void CompleteBuildObject()
+    public void CompleteBuildObject(BuildingItemData _itemdata, Vector3 point)
     {
-        Destroy(this);
+        Renderer renderer = GetComponent<Renderer>();
+        float height = renderer.bounds.size.y / 2;
+        InstantiateBuilding(_itemdata, point + new Vector3(0, height, 0));
+        Destroy(gameObject);
     }
 
     public void SetBuildObjectPos(Vector3 vector3)
     {
         //get half of height
-        Renderer renderer = buildObject.GetComponent<Renderer>();
+        Renderer renderer = GetComponent<Renderer>();
         float height = renderer.bounds.size.y;
 
         //set position
         transform.position = new Vector3(vector3.x, vector3.y + height / 2f, vector3.z);
     }
-
-    private bool InstantiateBuilding(out GameObject buildingObject, BuidingItemData buidingItemData)
+    /*
+    private bool InstantiateBuilding(out GameObject buildingObject, BuildingItemData buidingItemData)
     {
         buildingObject = null;
         if (PhotonNetwork.IsConnected == false)
         {
-            buildingObject = Instantiate(buidingItemData.ItemPrefab, this.transform);
+            buildingObject = Instantiate(buidingItemData.ItemPrefab, InGameManager.Instance.PlayerInstalledObjectsParent.transform);
         }
         else
         {
             buildingObject = PhotonNetwork.Instantiate(buidingItemData.ItemPrefab.name, transform.position, Quaternion.identity, 0);
-            buildingObject.transform.parent = this.transform;
+            buildingObject.transform.parent = null;
+        }
+
+        return true;
+    }*/
+    private bool InstantiateBuilding(BuildingItemData buidingItemData, Vector3 position)
+    {
+        if (PhotonNetwork.IsConnected == false)
+        {
+            GameObject gameobject = Instantiate(buidingItemData.ItemPrefab, position, Quaternion.identity, InGameManager.Instance.PlayerInstalledObjectsParent.transform);
+            gameobject.transform.SetParent(StaticManager.Instance.transform);
+        }
+        else
+        {
+            GameObject gameobject = PhotonNetwork.Instantiate(buidingItemData.ItemPrefab.name, position, Quaternion.identity, 0);
+            gameobject.transform.SetParent(StaticManager.Instance.transform);
+            photonView.RPC(nameof(ChangerTranform), RpcTarget.All);
         }
 
         return true;
     }
+    [PunRPC]
+    public void ChangerTranform()
+    {
+        transform.SetParent(StaticManager.Instance.transform);
+    }
+    public bool SetBuildingMesh(Mesh mesh, Material material)
+    {
+        MeshFilter meshFilter = GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
 
+        if (meshFilter != null && meshRenderer != null)
+        {
+            meshFilter.mesh = mesh;
+            meshRenderer.material = material;
+            return true;
+        }
+        else
+        {
+            Debug.LogError("MeshFilter or MeshRenderer not found on game object.");
+            return false;
+        }
+    }
 
     /*/*
     */
@@ -107,6 +141,7 @@ public class CreateBuilding : MonoBehaviour, ICancelbuild,  ISetBuildObjectPos, 
             Debug.Log("No walkable point found!");
         }
     }
+
     /*
-     */
+*/
 }
